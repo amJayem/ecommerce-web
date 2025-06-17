@@ -1,10 +1,15 @@
-import { Button } from '@/components/ui/button'
+import { CategorySection } from '@/components/category-section'
+import { HeroSection } from '@/components/hero-section'
+import { Navbar } from '@/components/navbar'
+import { ProductGrid } from '@/components/product-grid'
 
 export default function HomePage() {
   return (
     <main className='p-4'>
-      <h1 className='text-2xl font-bold'>Welcome to Your eCommerce App</h1>
-      <Button className='mt-4'>Explore Products</Button>
+      <Navbar />
+      <HeroSection />
+      <CategorySection />
+      <ProductGrid />
     </main>
   )
 }
