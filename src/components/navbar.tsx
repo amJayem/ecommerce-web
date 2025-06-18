@@ -2,12 +2,20 @@
 
 'use client'
 
-import Link from 'next/link'
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { ShoppingCart, User, Menu } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { RootState } from '@/store'
+import { toggleCart } from '@/store/cartSlice'
+import { Menu, ShoppingCart, User } from 'lucide-react'
+import Link from 'next/link'
+import { useDispatch, useSelector } from 'react-redux'
 
 export function Navbar() {
+  const dispatch = useDispatch()
+  const itemCount = useSelector((state: RootState) =>
+    state.cart.items.reduce((sum, item) => sum + item.quantity, 0)
+  )
+
   return (
     <header className='w-full bg-white shadow-sm'>
       <div className='max-w-7xl mx-auto px-4 py-3 flex items-center justify-between'>
@@ -27,14 +35,17 @@ export function Navbar() {
 
         {/* Right: Icons */}
         <div className='flex items-center gap-4'>
-          <Link href='/cart'>
-            <Button variant='ghost' size='icon' className='relative'>
-              <ShoppingCart className='w-5 h-5' />
-              <span className='absolute top-0 right-0 h-4 w-4 bg-red-500 text-xs text-white rounded-full flex items-center justify-center'>
-                2
+          <Button
+            variant='ghost'
+            className='relative'
+            onClick={() => dispatch(toggleCart())}>
+            <ShoppingCart className='h-5 w-5' />
+            {itemCount > 0 && (
+              <span className='absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center'>
+                {itemCount}
               </span>
-            </Button>
-          </Link>
+            )}
+          </Button>
 
           <Link href='/profile'>
             <Button variant='ghost' size='icon'>
