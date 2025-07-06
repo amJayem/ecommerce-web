@@ -8,7 +8,7 @@ interface Product {
   id: number
   name: string
   price: number
-  image: string
+  imageUrl: string
   discount?: number
 }
 
@@ -23,7 +23,7 @@ export function ProductCard({ product }: { product: Product }) {
 
       <div className='w-full h-40 relative mb-4'>
         <Image
-          src={product?.image}
+          src={product?.imageUrl}
           alt={product?.name}
           fill
           className='object-contain'
