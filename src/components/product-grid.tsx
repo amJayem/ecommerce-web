@@ -1,18 +1,18 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { fetchDummyProducts } from '@/lib/products'
 import { Button } from '@/components/ui/button'
-import Image from 'next/image'
-import { ShoppingCart } from 'lucide-react'
+import { fetchAllProducts } from '@/lib/api/product'
 import { addToCart } from '@/store/cartSlice'
+import { ShoppingCart } from 'lucide-react'
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 type Product = {
   id: number
   name: string
   price: number
-  image: string
+  imageUrl: string
 }
 
 export default function ProductGrid() {
@@ -20,11 +20,9 @@ export default function ProductGrid() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    async function load() {
-      const data = await fetchDummyProducts()
-      setProducts(data)
-    }
-    load()
+    fetchAllProducts()
+      .then(setProducts)
+      .catch((err) => console.error('Failed to load products', err))
   }, [])
 
   return (
@@ -34,8 +32,8 @@ export default function ProductGrid() {
           key={product?.id}
           className='border rounded-xl p-4 shadow-sm hover:shadow-md transition'>
           <Image
-            src={'/hero-image.png'}
-            // src={product?.image || '/hero-image.png'}
+            // src={'/hero-image.png'}
+            src={product?.imageUrl || '/hero-image.png'}
             alt={product?.name}
             width={300}
             height={300}
