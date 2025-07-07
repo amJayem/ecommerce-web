@@ -20,6 +20,8 @@ import {
   decreaseQuantity
 } from '@/store/cartSlice'
 import { RootState } from '@/store'
+import Image from 'next/image'
+import Link from 'next/link'
 
 export function CartDrawer() {
   const dispatch = useDispatch()
@@ -50,11 +52,13 @@ export function CartDrawer() {
               <div
                 key={item?.id}
                 className='flex items-start justify-between gap-4 py-4 border-b'>
-                {/* <img
-                  src={item?.image}
-                  alt={item?.name}
-                  className='w-16 h-16 rounded-md object-cover'
-                /> */}
+                <Image
+                  src={item.imageUrl}
+                  alt={item.name}
+                  width={500}
+                  height={500}
+                  className='w-15 h-15 rounded-md object-cover'
+                />
                 <div className='flex-1'>
                   <h4 className='font-medium text-base'>{item?.name}</h4>
                   <p className='text-sm text-gray-500'>
@@ -99,9 +103,15 @@ export function CartDrawer() {
               {total.toFixed(2)}
             </span>
           </div>
-          <Button className='w-full bg-green-600 hover:bg-green-700'>
-            Proceed to Checkout
-          </Button>
+          <Link
+            href={'/checkout'}
+            onClick={() => {
+              dispatch(toggleCart())
+            }}>
+            <Button className='w-full bg-green-600 hover:bg-green-700'>
+              Proceed to Checkout
+            </Button>
+          </Link>
           <DrawerClose asChild>
             <Button variant='ghost'>Close</Button>
           </DrawerClose>
