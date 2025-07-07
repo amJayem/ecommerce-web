@@ -27,7 +27,6 @@ export const cartSlice = createSlice({
       state.isOpen = !state.isOpen
     },
     addToCart: (state, action: PayloadAction<Omit<CartItem, 'quantity'>>) => {
-      console.log(action.payload)
       const existingItem = state.items.find(
         (item) => item.id === action.payload.id
       )
