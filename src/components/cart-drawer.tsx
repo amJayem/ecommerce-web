@@ -104,6 +104,7 @@ export function CartDrawer() {
             </span>
           </div>
           <Link
+            hidden={items.length === 0}
             href={'/checkout'}
             onClick={() => {
               dispatch(toggleCart())
@@ -113,7 +114,7 @@ export function CartDrawer() {
             </Button>
           </Link>
           <DrawerClose asChild>
-            <Button variant='ghost'>Close</Button>
+            <Button variant='outline'>Close</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
