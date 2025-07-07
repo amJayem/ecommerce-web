@@ -2,9 +2,10 @@
 
 import { Button } from '@/components/ui/button'
 import { fetchAllProducts } from '@/lib/api/product'
-import { addToCart } from '@/store/cartSlice'
+import { addToCart, toggleCart } from '@/store/cartSlice'
 import { ShoppingCart } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -15,13 +16,22 @@ type Product = {
   imageUrl: string
 }
 
+const sanitizeProduct = (data: Partial<Product>): Product => {
+  return {
+    id: data.id ?? Date.now(), // fallback ID
+    name: data.name ?? 'Unknown Product',
+    price: data.price ?? 0,
+    imageUrl: data.imageUrl ?? '/img/placeholder_image.png'
+  }
+}
+
 export default function ProductGrid() {
   const [products, setProducts] = useState<Product[]>([])
   const dispatch = useDispatch()
 
   useEffect(() => {
     fetchAllProducts()
-      .then(setProducts)
+      .then((res) => setProducts(res.map(sanitizeProduct)))
       .catch((err) => console.error('Failed to load products', err))
   }, [])
 
@@ -39,16 +49,18 @@ export default function ProductGrid() {
             height={300}
             className='w-full h-48 object-cover rounded-md'
           />
-          <h3 className='mt-2 text-lg font-semibold text-gray-800'>
-            {product?.name}
-          </h3>
+          <Link href={`/products/${product?.id}`}>
+            <h3 className='mt-2 text-lg font-semibold text-gray-800 '>
+              {product?.name}
+            </h3>
+          </Link>
           <p className='text-green-600 font-bold'>৳ {product?.price}</p>
-          {/* <Button >Add to Cart</Button> */}
+
           <Button
             className='mt-2 w-full'
             onClick={() => {
-              console.log('Clicked!', product)
               dispatch(addToCart(product))
+              dispatch(toggleCart())
             }}>
             <ShoppingCart className='h-4 w-4 mr-2' />
             Add to Cart
