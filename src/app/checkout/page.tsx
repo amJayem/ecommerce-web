@@ -9,20 +9,44 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/store'
 import Link from 'next/link'
 import { clearCart } from '@/store/cartSlice'
+import { submitOrder } from '@/lib/api/order';
+import toast from 'react-hot-toast';
+import { useState } from 'react';
 
 export default function CheckoutPage() {
   const cartItems = useSelector((state: RootState) => state.cart.items)
   const router = useRouter()
   const dispatch = useDispatch()
+  const [loading, setLoading] = useState(false);
 
   const total = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   )
 
-  function handlePlaceOrder() {
-    // Future: Call backend API to place order
-    router.push('/order-confirmation')
+  async function handlePlaceOrder() {
+    if (cartItems.length === 0) return;
+    setLoading(true);
+    try {
+      // Prepare order payload
+      const orderPayload = {
+        items: cartItems.map(item => ({
+          productId: item.id,
+          quantity: item.quantity,
+          price: item.price
+        })),
+        total
+      };
+      // Call backend API to place order
+      await submitOrder(orderPayload);
+      toast.success('Order placed successfully!');
+      dispatch(clearCart());
+      router.push('/order-confirmation');
+    } catch {
+      toast.error('Failed to place order. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   if (cartItems.length === 0) {
@@ -78,11 +102,8 @@ export default function CheckoutPage() {
 
       {/* Place Order Button */}
       <div className="text-right">
-        <Button onClick={() => {
-          handlePlaceOrder()
-          dispatch(clearCart())
-        }} className="w-full md:w-auto">
-          Place Order
+        <Button onClick={handlePlaceOrder} className="w-full md:w-auto" disabled={loading}>
+          {loading ? 'Placing Order...' : 'Place Order'}
         </Button>
       </div>
     </div>

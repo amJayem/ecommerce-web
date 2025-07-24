@@ -1,12 +1,12 @@
-// lib/api/product.ts
-import { Product } from '@/types/product'
-import { get, post, put, del } from './client'
+// Only read-only product APIs are exposed here for customers. Admin actions are handled in the dashboard app.
+import { Product } from '@/types/product';
+import { get } from './client';
 
-export const fetchAllProducts = () => get<Product[]>('/products')
-export const fetchSuggestedProducts = () => get<Product[]>('/products')
-export const fetchProductById = (id: number) => get<Product>(`/products/${id}`)
-export const createProduct = (data: Partial<Product>) =>
-  post<Product>('/products', data)
-export const updateProduct = (id: number, data: Partial<Product>) =>
-  put<Product>(`/products/${id}`, data)
-export const deleteProduct = (id: number) => del(`/products/${id}`)
+// Fetch all products from the backend
+export const fetchAllProducts = () => get<Product[]>("/products");
+
+// Fetch suggested products (currently same as all products)
+export const fetchSuggestedProducts = () => get<Product[]>("/products");
+
+// Fetch a single product by ID
+export const fetchProductById = (id: number) => get<Product>(`/products/${id}`);
