@@ -24,17 +24,23 @@ export function Navbar() {
           GroceyFresh
         </Link>
 
-        {/* Center: Search Bar */}
-        <div className='hidden md:flex flex-1 mx-6'>
-          <Input
-            type='text'
-            placeholder='Search for products...'
-            className='rounded-md border-gray-300 focus-visible:ring-0 focus-visible:ring-offset-0'
-          />
-        </div>
+        {/* Center: Nav Items */}
+        <nav className='hidden md:flex flex-1 mx-6 gap-6 items-center'>
+          <Link href='/products' className='text-gray-700 hover:text-green-700 font-medium'>All Products</Link>
+          <Link href='/products/categories' className='text-gray-700 hover:text-green-700 font-medium'>Categories</Link>
+          <Link href='/about' className='text-gray-700 hover:text-green-700 font-medium'>About</Link>
+          <Link href='/contact' className='text-gray-700 hover:text-green-700 font-medium'>Contact</Link>
+        </nav>
 
-        {/* Right: Icons */}
+        {/* Right: Search and Icons */}
         <div className='flex items-center gap-4'>
+          <div className='hidden md:block'>
+            <Input
+              type='text'
+              placeholder='Search for products...'
+              className='rounded-md border-gray-300 focus-visible:ring-0 focus-visible:ring-offset-0'
+            />
+          </div>
           <Button
             variant='ghost'
             className='relative'
@@ -46,13 +52,11 @@ export function Navbar() {
               </span>
             )}
           </Button>
-
-          <Link href='/profile'>
+          <Link href='/account/profile'>
             <Button variant='ghost' size='icon'>
               <User className='w-5 h-5' />
             </Button>
           </Link>
-
           {/* Optional mobile menu */}
           <Button variant='ghost' size='icon' className='md:hidden'>
             <Menu className='w-5 h-5' />
