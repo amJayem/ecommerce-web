@@ -25,20 +25,20 @@ export function Navbar() {
         </Link>
 
         {/* Center: Nav Items */}
-        <nav className='hidden md:flex flex-1 mx-6 gap-6 items-center'>
-          <Link href='/products' className='text-gray-700 hover:text-green-700 font-medium'>All Products</Link>
-          <Link href='/products/categories' className='text-gray-700 hover:text-green-700 font-medium'>Categories</Link>
-          <Link href='/about' className='text-gray-700 hover:text-green-700 font-medium'>About</Link>
-          <Link href='/contact' className='text-gray-700 hover:text-green-700 font-medium'>Contact</Link>
+        <nav className='hidden md:flex flex-1 mx-6 gap-4 items-center'>
+          <Link href='/products' className='text-gray-700 hover:text-green-700 font-medium text-sm transition-colors'>All Products</Link>
+          <Link href='/products/categories' className='text-gray-700 hover:text-green-700 font-medium text-sm transition-colors'>Categories</Link>
+          <Link href='/about' className='text-gray-700 hover:text-green-700 font-medium text-sm transition-colors'>About</Link>
+          <Link href='/contact' className='text-gray-700 hover:text-green-700 font-medium text-sm transition-colors'>Contact</Link>
         </nav>
 
         {/* Right: Search and Icons */}
-        <div className='flex items-center gap-4'>
-          <div className='hidden md:block'>
+        <div className='flex items-center gap-3'>
+          <div className='hidden md:block w-48'>
             <Input
               type='text'
               placeholder='Search for products...'
-              className='rounded-md border-gray-300 focus-visible:ring-0 focus-visible:ring-offset-0'
+              className='rounded-md border-gray-300 focus-visible:ring-0 focus-visible:ring-offset-0 text-sm'
             />
           </div>
           <Button

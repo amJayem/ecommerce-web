@@ -1,3 +1,4 @@
+'use client'
 // Contact page placeholder with modern UX
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
