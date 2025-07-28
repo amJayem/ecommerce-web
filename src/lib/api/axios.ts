@@ -1,31 +1,29 @@
 // lib/api/axios.ts
-import axios from 'axios'
+import axios from "axios";
+
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000', // your NestJS URL
-  withCredentials: true, // useful if dealing with cookies or auth
-  timeout: 10000,
-  headers: {
-    // 'X-App-Token': process.env.NEXT_PUBLIC_APP_ACCESS_TOKEN
-  }
-})
+  baseURL,
+  timeout: 15000, // timeout for server-side requests
+  headers: { "Content-Type": "application/json" },
+});
 
-// Add interceptors for auth, logging, etc.
-api.interceptors.request.use((config) => {
-  // Example: attach token
-  const token =
-    typeof window !== 'undefined' ? localStorage.getItem('token') : null
-  if (token) config.headers.Authorization = `Bearer ${token}`
-  return config
-})
+// Debug: Log the base URL (only in development)
+console.log("API Base URL:", process.env.NEXT_PUBLIC_API_BASE_URL);
 
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    // Optionally log or transform errors globally
-    console.error('API Error:', err)
-    return Promise.reject(err)
+    // Better error logging
+    console.error("API Error:", {
+      message: err.message,
+      status: err.response?.status,
+      url: err.config?.url,
+      baseURL: err.config?.baseURL,
+    });
+    return Promise.reject(err);
   }
-)
+);
 
-export default api
+export default api;
