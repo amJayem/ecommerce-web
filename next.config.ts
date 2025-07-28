@@ -1,10 +1,14 @@
-import type { NextConfig } from 'next'
+import type { NextConfig } from "next";
+
+const imageDomains =
+  process.env.NEXT_PUBLIC_IMAGE_DOMAINS?.split(",").map((domain) =>
+    domain.trim()
+  ) || [];
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
-    domains: ['images.unsplash.com', 'img.freepik.com']
-  }
-}
+    domains: imageDomains,
+  },
+};
 
-export default nextConfig
+export default nextConfig;
