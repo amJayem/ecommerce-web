@@ -1,12 +1,10 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { fetchAllProducts } from '@/lib/api/product'
 import { addToCart, toggleCart } from '@/store/cartSlice'
 import { ShoppingCart } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 type Product = {
@@ -16,33 +14,20 @@ type Product = {
   imageUrl: string
 }
 
-const sanitizeProduct = (data: Partial<Product>): Product => {
-  return {
-    id: data.id ?? Date.now(), // fallback ID
-    name: data.name ?? 'Unknown Product',
-    price: data.price ?? 0,
-    imageUrl: data.imageUrl ?? '/img/placeholder_image.png'
-  }
+type ProductGridProps = {
+  products: Product[]
 }
 
-export default function ProductGrid() {
-  const [products, setProducts] = useState<Product[]>([])
+export default function ProductGrid({ products }: ProductGridProps) {
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    fetchAllProducts()
-      .then((res) => setProducts(res.map(sanitizeProduct)))
-      .catch((err) => console.error('Failed to load products', err))
-  }, [])
 
   return (
     <section className='py-8 max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
-      {products.map((product) => (
+      {products?.map((product) => (
         <div
           key={product?.id}
           className='border rounded-xl p-4 shadow-sm hover:shadow-md transition'>
           <Image
-            // src={'/hero-image.png'}
             src={product?.imageUrl || '/hero-image.png'}
             alt={product?.name}
             width={300}
