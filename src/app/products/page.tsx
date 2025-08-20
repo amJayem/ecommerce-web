@@ -1,30 +1,32 @@
 // All Products page with modern UX - Server-side data fetching
-import ProductGrid from '@/components/product-grid';
-import { fetchAllProducts } from '@/lib/api/product';
+import ProductGrid from "@/components/product-grid";
+import { fetchAllProducts } from "@/lib/api/product";
 
 type Product = {
   id: number;
   name: string;
   price: number;
   imageUrl: string;
+  coverImage: string;
 };
 
 export default async function AllProductsPage() {
   let products: Product[] = [];
-  
+
   try {
     // Fetch products server-side for better performance and SEO
     const productsRaw = await fetchAllProducts();
-    
+
     // Sanitize products (moved from client component)
     products = productsRaw.map((data) => ({
       id: data.id ?? Date.now(),
-      name: data.name ?? 'Unknown Product',
+      name: data.name ?? "Unknown Product",
       price: data.price ?? 0,
-      imageUrl: data.imageUrl ?? '/img/placeholder_image.png'
+      imageUrl: data.imageUrl ?? "/img/placeholder_image.png",
+      coverImage: data.coverImage ?? "/img/placeholder_image.png",
     }));
   } catch (error) {
-    console.error('Failed to fetch products:', error);
+    console.error("Failed to fetch products:", error);
     // Return empty products array - the grid will handle empty state
     products = [];
   }
@@ -35,4 +37,4 @@ export default async function AllProductsPage() {
       <ProductGrid products={products} />
     </div>
   );
-} 
+}

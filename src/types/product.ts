@@ -5,6 +5,7 @@ export interface Product {
   price: number; // Product price
   description?: string; // Product description
   imageUrl?: string; // Product image URL (optional)
+  coverImage?: string; // Product cover image URL (optional)
   category?: string; // Product category (optional)
   stock?: number; // Product stock (optional)
   brand?: string; // Product brand (optional)

@@ -3,6 +3,7 @@ import { fetchProductById } from "@/lib/api/product";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import ProductActions from "./product-actions";
+import { getSafeImageSrc } from "@/lib/utils";
 
 // API response type (what we get from the backend)
 interface ProductApiResponse {
@@ -11,6 +12,7 @@ interface ProductApiResponse {
   description?: string;
   price?: number;
   imageUrl?: string;
+  coverImage?: string;
   category?: string;
   stock?: number;
   brand?: string;
@@ -28,6 +30,7 @@ interface Product {
   description: string;
   price: number;
   imageUrl?: string;
+  coverImage?: string;
   category?: string;
   stock: number;
   brand?: string;
@@ -45,6 +48,7 @@ const sanitizeProduct = (data: ProductApiResponse): Product => {
     description: data.description ?? "", // Ensure description is always a string
     price: data.price ?? 0, // Default to 0 if not present
     imageUrl: data.imageUrl ?? "/img/placeholder_image.png",
+    coverImage: data.coverImage ?? "/img/placeholder_image.png",
     category: data.category ?? "Uncategorized",
     stock: data.stock ?? 0, // Default to 0 if not present
     brand: data.brand ?? "Unknown Brand",
@@ -77,13 +81,13 @@ export default async function ProductDetailPage({
   if (!product) {
     return notFound();
   }
-
+  console.log("product: ", product);
   return (
     <div className="max-w-7xl mx-auto p-4 grid md:grid-cols-2 gap-8">
       {/* Product Image */}
       <div className="w-full h-[400px] relative">
         <Image
-          src={product.imageUrl || "/img/placeholder_image.png"}
+          src={getSafeImageSrc(product.coverImage)}
           alt={product.name}
           fill
           className="object-contain rounded-xl bg-gray-50"
@@ -111,7 +115,9 @@ export default async function ProductDetailPage({
         <div className="text-sm text-gray-500">Weight: {product.weight}g</div>
         <div className="text-sm text-gray-500">Stock: {product.stock}</div>
         {product.isFeatured && (
-          <div className="text-sm text-blue-600 font-medium">⭐ Featured Product</div>
+          <div className="text-sm text-blue-600 font-medium">
+            ⭐ Featured Product
+          </div>
         )}
 
         {/* Client component for cart interactions */}

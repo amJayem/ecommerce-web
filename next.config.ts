@@ -5,9 +5,11 @@ const imageDomains =
     domain.trim()
   ) || [];
 
+console.log("imageDomains", imageDomains);
+
 const nextConfig: NextConfig = {
   images: {
-    domains: imageDomains,
+    domains: [...imageDomains, "localhost", "127.0.0.1"],
   },
 };
 

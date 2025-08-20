@@ -1,0 +1,21 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // "workbench.colorTheme": "Tomorrow Night Blue",
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#0f766e",
+    "titleBar.inactiveBackground": "#0f766e",
+    "titleBar.activeForeground": "#ffffff",
+    "titleBar.inactiveForeground": "#e6fffb",
+    "editor.lineHighlightBackground": "#ffd7a622",
+    "editor.lineHighlightBorder": "#ffffff12",
+    "editor.background": "#0b1314",
+    "sideBar.background": "#0b1f22",
+    "activityBar.background": "#0ea5a4",
+    "activityBar.foreground": "#ffffff",
+    "activityBar.activeBackground": "#34d399",
+    "settings.headerBorder": "#5eead4",
+    "statusBar.background": "#115e59",
+    "statusBar.foreground": "#ffffff"
+  }
+}
