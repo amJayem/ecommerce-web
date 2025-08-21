@@ -1,17 +1,37 @@
 // Product type updated to match backend model
 export interface Product {
-  id: number; // Product ID
+  id: number; // Unique product ID
   name: string; // Product name
-  price: number; // Product price
-  description?: string; // Product description
-  imageUrl?: string; // Product image URL (optional)
-  coverImage?: string; // Product cover image URL (optional)
-  category?: string; // Product category (optional)
-  stock?: number; // Product stock (optional)
-  brand?: string; // Product brand (optional)
-  discount?: number; // Product discount (optional)
-  weight?: number; // Product weight (optional)
-  isFeatured?: boolean; // Is product featured (optional)
-  createdAt?: string; // Creation date (optional)
-  updatedAt?: string; // Last update date (optional)
+  slug: string; // SEO-friendly URL slug (e.g., "organic-honey-500g")
+
+  description: string; // Detailed product description
+  shortDescription?: string; // Short description for listing/preview
+
+  price: number; // Current selling price
+  oldPrice?: number; // Previous price (for discounts)
+  discount?: number; // Discount percentage (if applicable)
+
+  imageUrl: string; // Primary product image
+  coverImage?: string; // Cover/banner image for product detail page
+  gallery?: string[]; // Multiple product images
+
+  category: string; // Product category (e.g., "Fruits", "Beverages")
+  subCategory?: string; // Sub-category (optional)
+
+  brand?: string; // Brand name (if applicable)
+  weight?: number; // Product weight (in grams, kg, ml, etc.)
+  unit?: string; // Unit type ("kg", "g", "ml", "L", "pcs")
+
+  stock: number; // Current stock quantity
+  sku?: string; // Stock Keeping Unit (unique code for inventory)
+  isFeatured?: boolean; // Highlight product on homepage or special section
+  isNewArrival?: boolean; // Mark as new arrival
+
+  ratings?: number; // Average rating (1–5)
+  reviewsCount?: number; // Number of reviews
+
+  tags?: string[]; // For search optimization (e.g., ["organic", "honey", "natural"])
+
+  createdAt: string; // Creation timestamp
+  updatedAt: string; // Last update timestamp
 }

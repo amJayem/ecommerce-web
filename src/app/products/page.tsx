@@ -2,6 +2,10 @@
 import ProductGrid from "@/components/product-grid";
 import { fetchAllProducts } from "@/lib/api/product";
 
+// Avoid build-time API calls; always render dynamically
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 type Product = {
   id: number;
   name: string;

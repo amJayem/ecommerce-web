@@ -2,6 +2,7 @@
 import axios from "axios";
 
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const isDev = process.env.NODE_ENV !== "production";
 
 const api = axios.create({
   baseURL,
@@ -10,18 +11,22 @@ const api = axios.create({
 });
 
 // Debug: Log the base URL (only in development)
-console.log("API Base URL:", process.env.NEXT_PUBLIC_API_BASE_URL);
+if (isDev) {
+  console.log("API Base URL:", process.env.NEXT_PUBLIC_API_BASE_URL);
+}
 
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    // Better error logging
-    console.error("API Error:", {
-      message: err.message,
-      status: err.response?.status,
-      url: err.config?.url,
-      baseURL: err.config?.baseURL,
-    });
+    // Better error logging (dev only to reduce build noise)
+    if (isDev) {
+      console.error("API Error:", {
+        message: err.message,
+        status: err.response?.status,
+        url: err.config?.url,
+        baseURL: err.config?.baseURL,
+      });
+    }
     return Promise.reject(err);
   }
 );

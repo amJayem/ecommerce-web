@@ -5,6 +5,10 @@ import { notFound } from "next/navigation";
 import ProductActions from "./product-actions";
 import { getSafeImageSrc } from "@/lib/utils";
 
+// Avoid build-time API calls; always render dynamically
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 // API response type (what we get from the backend)
 interface ProductApiResponse {
   id?: number;
