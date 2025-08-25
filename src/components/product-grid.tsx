@@ -22,9 +22,9 @@ type ProductGridProps = {
 
 export default function ProductGrid({ products }: ProductGridProps) {
   const dispatch = useDispatch();
-  console.log("products: ", products);
+  // console.log("products: ", products);
   return (
-    <section className="py-8 max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    <section className="py-8 max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
       {products?.map((product) => (
         <div
           key={product?.id}

@@ -1,7 +1,7 @@
 // components/category-section.tsx
 
-import { categories } from '@/lib/data/categories'
-import { Button } from '@/components/ui/button'
+import { categories } from "@/lib/data/categories";
+import { Button } from "@/components/ui/button";
 import {
   LucideIcon,
   Apple,
@@ -11,9 +11,14 @@ import {
   Fish,
   Drumstick,
   Croissant,
-  Candy
-} from 'lucide-react'
-import Link from 'next/link'
+  Candy,
+  Flame,
+  Milk as Cheese,
+  Wheat,
+  Droplets as Oil,
+  Home,
+} from "lucide-react";
+import Link from "next/link";
 
 const iconMap: Record<string, LucideIcon> = {
   Apple,
@@ -23,44 +28,65 @@ const iconMap: Record<string, LucideIcon> = {
   Fish,
   Drumstick,
   Croissant,
-  Candy
-}
+  Candy,
+  Flame,
+  Cheese,
+  Wheat,
+  Oil,
+  Home,
+};
 
 export function CategorySection() {
   return (
-    <section className='w-full py-10 bg-white'>
-      <div className='max-w-7xl mx-auto px-4'>
-        <div className='flex justify-between items-center mb-6'>
-          <h2 className='text-2xl font-semibold text-gray-800'>
+    <section className="w-full py-16 bg-white">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">
             Shop by Category
           </h2>
-          <Link href='/categories'>
-            <Button
-              variant='outline'
-              className='text-green-700 border-green-500'>
-              See All
-            </Button>
-          </Link>
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            Discover our wide range of fresh, organic products organized by
+            category
+          </p>
         </div>
 
-        <div className='grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4'>
-          {categories.map(({ name, icon }) => {
-            const IconComponent = iconMap[icon]
-            if (!IconComponent) return null
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-8">
+          {categories.slice(0, 10).map(({ name, icon }) => {
+            const IconComponent = iconMap[icon];
+            if (!IconComponent) return null;
 
             return (
-              <Link href={`/categories/${name.toLowerCase()}`} key={name}>
-                <div className='flex flex-col items-center p-4 bg-green-50 rounded-xl hover:shadow-md transition'>
-                  <IconComponent size={32} className='text-green-600 mb-2' />
-                  <span className='text-sm font-medium text-gray-700'>
+              <Link
+                href={`/products/categories/${name
+                  .toLowerCase()
+                  .replace(/\s+/g, "-")}`}
+                key={name}
+              >
+                <div className="flex flex-col items-center p-6 bg-green-50 rounded-xl hover:shadow-lg hover:bg-green-100 transition-all duration-300 group">
+                  <div className="p-3 bg-white rounded-full mb-4 group-hover:scale-110 transition-transform">
+                    <IconComponent size={28} className="text-green-600" />
+                  </div>
+                  <span className="text-sm font-medium text-gray-700 text-center">
                     {name}
                   </span>
                 </div>
               </Link>
-            )
+            );
           })}
+        </div>
+
+        <div className="text-center">
+          <Link href="/products/categories">
+            <Button
+              variant="outline"
+              size="lg"
+              className="text-green-700 border-green-500 hover:bg-green-600 hover:text-white px-8 py-3"
+            >
+              See All Categories
+            </Button>
+          </Link>
         </div>
       </div>
     </section>
-  )
+  );
 }

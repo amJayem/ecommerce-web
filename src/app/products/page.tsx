@@ -36,9 +36,18 @@ export default async function AllProductsPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto py-10 px-4">
-      <h1 className="text-3xl font-bold mb-6 text-green-700">All Products</h1>
-      <ProductGrid products={products} />
-    </div>
+    <section className="w-full py-16 bg-white">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">
+            Featured Products
+          </h2>
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            Discover our carefully curated selection of fresh, organic products
+          </p>
+        </div>
+        <ProductGrid products={products} />
+      </div>
+    </section>
   );
 }

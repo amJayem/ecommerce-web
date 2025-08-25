@@ -1,5 +1,8 @@
 import { CategorySection } from "@/components/category-section";
 import { HeroSection } from "@/components/hero-section";
+import { ValueProposition } from "@/components/value-proposition";
+import { BestsellersSection } from "@/components/bestsellers-section";
+import { NewsletterSignup } from "@/components/newsletter-signup";
 import AllProductsPage from "./products/page";
 
 // Avoid build-time API calls; always render dynamically
@@ -13,10 +16,13 @@ export const metadata = {
 
 export default function HomePage() {
   return (
-    <main className="p-4">
+    <main>
       <HeroSection />
       <CategorySection />
+      <ValueProposition />
       <AllProductsPage />
+      <BestsellersSection />
+      <NewsletterSignup />
     </main>
   );
 }
