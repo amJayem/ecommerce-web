@@ -1,142 +1,267 @@
-// app/products/[id]/page.tsx - Server-side data fetching
-import { fetchProductById } from "@/lib/api/product";
-import Image from "next/image";
+"use client";
+
+// Product detail page with enhanced UX
+import { products } from "@/lib/products-data";
+
 import { notFound } from "next/navigation";
-import ProductActions from "./product-actions";
-import { getSafeImageSrc } from "@/lib/utils";
+import Link from "next/link";
 
-// Avoid build-time API calls; always render dynamically
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+import {
+  ArrowLeft,
+  Star,
+  Truck,
+  Shield,
+  RefreshCw,
+  Package,
+  Scale,
+} from "lucide-react";
+import { QuantityUpdater } from "@/components/quantity-updater";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+import Image from "next/image";
 
-// API response type (what we get from the backend)
-interface ProductApiResponse {
-  id?: number;
-  name?: string;
-  description?: string;
-  price?: number;
-  imageUrl?: string;
-  coverImage?: string;
-  category?: string;
-  stock?: number;
-  brand?: string;
-  discount?: number;
-  weight?: number;
-  isFeatured?: boolean;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-// Product interface for our app (with proper Date types)
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  imageUrl?: string;
-  coverImage?: string;
-  category?: string;
-  stock: number;
-  brand?: string;
-  discount?: number;
-  weight?: number;
-  isFeatured: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const sanitizeProduct = (data: ProductApiResponse): Product => {
-  return {
-    id: data.id ?? 0, // Default to 0 if not present
-    name: data.name ?? "N/A", // Default to "N/A" if not present
-    description: data.description ?? "", // Ensure description is always a string
-    price: data.price ?? 0, // Default to 0 if not present
-    imageUrl: data.imageUrl ?? "/img/placeholder_image.png",
-    coverImage: data.coverImage ?? "/img/placeholder_image.png",
-    category: data.category ?? "Uncategorized",
-    stock: data.stock ?? 0, // Default to 0 if not present
-    brand: data.brand ?? "Unknown Brand",
-    discount: data.discount ?? 0,
-    weight: data.weight ?? 0,
-    isFeatured: data.isFeatured ?? false, // Default to false if not present
-    createdAt: new Date(data.createdAt ?? ""), // Default to current date if not present
-    updatedAt: new Date(data.updatedAt ?? ""), // Default to current date if not present
+interface ProductPageProps {
+  params: {
+    id: string;
   };
-};
+}
 
-export default async function ProductDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-
-  let product: Product | null = null;
-
-  try {
-    // Fetch product data server-side for better performance and SEO
-    const rawData = await fetchProductById(+id);
-    product = sanitizeProduct(rawData);
-  } catch (error) {
-    console.error("Failed to fetch product:", error);
-    return notFound();
-  }
+export default function ProductPage({ params }: ProductPageProps) {
+  const productId = parseInt(params.id);
+  const product = products.find((p) => p.id === productId);
 
   if (!product) {
-    return notFound();
+    notFound();
   }
-  console.log("product: ", product);
+
+  // Get cart items to check current quantities
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const cartItem = cartItems.find((item) => item.id === product.id);
+  const currentQuantity = cartItem ? cartItem.quantity : 0;
+
+  // Get related products from the same category
+  const relatedProducts = products
+    .filter((p) => p.categoryId === product.categoryId && p.id !== product.id)
+    .slice(0, 4);
+
   return (
-    <div className="max-w-7xl mx-auto p-4 grid md:grid-cols-2 gap-8">
-      {/* Product Image */}
-      <div className="w-full h-[400px] relative">
-        <Image
-          src={getSafeImageSrc(product.coverImage)}
-          alt={product.name}
-          fill
-          className="object-contain rounded-xl bg-gray-50"
-        />
+    <div className="max-w-7xl mx-auto py-10 px-4">
+      {/* Breadcrumb Navigation */}
+      <div className="mb-8">
+        <Link
+          href="/products/categories"
+          className="inline-flex items-center text-green-600 hover:text-green-700 mb-2"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Categories
+        </Link>
+
+        <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
+          <Link href="/products/categories" className="hover:text-green-600">
+            Categories
+          </Link>
+          <span>/</span>
+          <Link
+            href={`/products/categories/${product.categoryId}`}
+            className="hover:text-green-600"
+          >
+            {product.category}
+          </Link>
+          <span>/</span>
+          <span className="text-gray-800">{product.name}</span>
+        </div>
       </div>
 
-      {/* Product Info */}
-      <div>
-        <h1 className="text-2xl font-bold text-green-700">{product.name}</h1>
-        <p className="text-gray-600 text-sm mt-2">{product.description}</p>
-
-        <div className="mt-4 text-xl text-green-800 font-bold">
-          ৳{product.price}
-        </div>
-        {product.discount && product.discount > 0 && (
-          <div className="mt-1 text-red-500 text-sm">
-            -{product.discount}% OFF
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        {/* Product Image */}
+        <div className="space-y-4">
+          <div className="relative">
+            {product.discount && (
+              <div className="absolute top-4 left-4 bg-red-500 text-white text-sm px-3 py-1 rounded-full z-10">
+                {product.discount}% OFF
+              </div>
+            )}
+            <div className="w-full h-96 bg-white border rounded-xl overflow-hidden relative">
+              <Image
+                src={product.imageUrl}
+                alt={product.name}
+                fill
+                className="object-contain p-4"
+              />
+            </div>
           </div>
-        )}
-
-        <div className="mt-2 text-sm text-gray-500">
-          Category: {product.category}
         </div>
-        <div className="text-sm text-gray-500">Brand: {product.brand}</div>
-        <div className="text-sm text-gray-500">Weight: {product.weight}g</div>
-        <div className="text-sm text-gray-500">Stock: {product.stock}</div>
-        {product.isFeatured && (
-          <div className="text-sm text-blue-600 font-medium">
-            ⭐ Featured Product
+
+        {/* Product Info */}
+        <div className="space-y-6">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">
+              {product.name}
+            </h1>
+            <div className="flex items-center gap-4 mb-4">
+              <div className="flex items-center">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className="w-5 h-5 text-yellow-400 fill-current"
+                  />
+                ))}
+                <span className="ml-2 text-gray-600">(4.8)</span>
+              </div>
+              <span className="text-green-600 font-medium">In Stock</span>
+            </div>
           </div>
-        )}
 
-        {/* Client component for cart interactions */}
-        <ProductActions product={product} />
-      </div>
+          {/* Price and Unit Information */}
+          <div className="space-y-4">
+            <div className="flex items-baseline gap-4">
+              <span className="text-3xl font-bold text-green-600">
+                ৳{product.price}
+              </span>
+              <span className="text-lg text-gray-600">per {product.unit}</span>
+            </div>
 
-      {/* Suggested Products */}
-      <div className="md:col-span-2 mt-10">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">
-          You may also like
-        </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {/* Suggested products will be implemented here */}
+            {product.discount && product.discount > 0 && (
+              <div className="flex items-center gap-2">
+                <span className="text-red-500 font-medium">
+                  -{product.discount}% OFF
+                </span>
+                <span className="text-gray-500 line-through">
+                  ৳{Math.round(product.price / (1 - product.discount / 100))}
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Short Description */}
+          {product.shortDescription && (
+            <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+              <h3 className="font-semibold text-green-800 mb-2">
+                Quick Highlights
+              </h3>
+              <p className="text-green-700">{product.shortDescription}</p>
+            </div>
+          )}
+
+          {/* Product Details */}
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <div className="flex items-center gap-2">
+              <Package className="w-4 h-4 text-gray-500" />
+              <span className="text-gray-600">Category:</span>
+              <span className="font-medium">{product.category}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Scale className="w-4 h-4 text-gray-500" />
+              <span className="text-gray-600">Weight:</span>
+              <span className="font-medium">{product.weight}g</span>
+            </div>
+          </div>
+
+          {/* Quantity Updater */}
+          <div className="pt-4">
+            <QuantityUpdater
+              product={{
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                imageUrl: product.imageUrl,
+                coverImage: product.imageUrl,
+              }}
+              currentQuantity={currentQuantity}
+              className="max-w-md"
+            />
+          </div>
+
+          {/* Trust Badges */}
+          <div className="grid grid-cols-3 gap-4 pt-6 border-t">
+            <div className="text-center">
+              <Truck className="w-8 h-8 text-green-600 mx-auto mb-2" />
+              <p className="text-xs text-gray-600">Fast Delivery</p>
+            </div>
+            <div className="text-center">
+              <Shield className="w-8 h-8 text-green-600 mx-auto mb-2" />
+              <p className="text-xs text-gray-600">Quality Assured</p>
+            </div>
+            <div className="text-center">
+              <RefreshCw className="w-8 h-8 text-green-600 mx-auto mb-2" />
+              <p className="text-xs text-gray-600">Easy Returns</p>
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* Detailed Description */}
+      {product.detailedDescription && (
+        <div className="mt-16">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">
+            Product Details
+          </h2>
+          <div className="bg-gray-50 p-6 rounded-xl">
+            <p className="text-gray-700 leading-relaxed">
+              {product.detailedDescription}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Related Products */}
+      {relatedProducts.length > 0 && (
+        <div className="mt-16">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">
+            You May Also Like
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {relatedProducts.map((relatedProduct) => {
+              const relatedCartItem = cartItems.find(
+                (item) => item.id === relatedProduct.id
+              );
+              const relatedCurrentQuantity = relatedCartItem
+                ? relatedCartItem.quantity
+                : 0;
+
+              return (
+                <div
+                  key={relatedProduct.id}
+                  className="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 p-4"
+                >
+                  <Link href={`/products/${relatedProduct.id}`}>
+                    <div className="w-full h-32 relative mb-4 overflow-hidden rounded-lg">
+                      <Image
+                        src={relatedProduct.imageUrl}
+                        alt={relatedProduct.name}
+                        fill
+                        className="object-contain hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <h3 className="font-semibold text-gray-800 mb-2 line-clamp-2 text-sm hover:text-green-600 transition-colors">
+                      {relatedProduct.name}
+                    </h3>
+                    <div className="mb-3">
+                      <p className="text-green-600 font-bold">
+                        ৳{relatedProduct.price}
+                      </p>
+                      <p className="text-gray-500 text-xs">
+                        per {relatedProduct.unit}
+                      </p>
+                    </div>
+                  </Link>
+
+                  <QuantityUpdater
+                    product={{
+                      id: relatedProduct.id,
+                      name: relatedProduct.name,
+                      price: relatedProduct.price,
+                      imageUrl: relatedProduct.imageUrl,
+                      coverImage: relatedProduct.imageUrl,
+                    }}
+                    currentQuantity={relatedCurrentQuantity}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

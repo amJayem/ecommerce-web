@@ -1,108 +1,99 @@
-// components/bestsellers-section.tsx
+"use client";
 
+import { products } from "@/lib/products-data";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart } from "lucide-react";
+import { QuantityUpdater } from "./quantity-updater";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 import Image from "next/image";
 import Link from "next/link";
 
+// Get bestseller products (mix of different categories for variety)
 const bestsellerProducts = [
-  {
-    id: 1,
-    name: "Pure Honey",
-    price: 299,
-    imageUrl: "/img/placeholder_image.png",
-    category: "Honey",
-  },
-  {
-    id: 2,
-    name: "Mustard Oil",
-    price: 189,
-    imageUrl: "/img/placeholder_image.png",
-    category: "Oils",
-  },
-  {
-    id: 3,
-    name: "Pure Ghee",
-    price: 450,
-    imageUrl: "/img/placeholder_image.png",
-    category: "Dairy",
-  },
-  {
-    id: 4,
-    name: "Fresh Dates",
-    price: 199,
-    imageUrl: "/img/placeholder_image.png",
-    category: "Fruits",
-  },
-  {
-    id: 5,
-    name: "Organic Almonds",
-    price: 399,
-    imageUrl: "/img/placeholder_image.png",
-    category: "Nuts",
-  },
-  {
-    id: 6,
-    name: "Black Pepper",
-    price: 89,
-    imageUrl: "/img/placeholder_image.png",
-    category: "Spices",
-  },
-];
+  ...products.filter((p) => p.categoryId === "fruits").slice(0, 2),
+  ...products.filter((p) => p.categoryId === "honey").slice(0, 1),
+  ...products.filter((p) => p.categoryId === "oils").slice(0, 1),
+  ...products.filter((p) => p.categoryId === "dairy").slice(0, 1),
+  ...products.filter((p) => p.categoryId === "spices").slice(0, 1),
+].slice(0, 6);
 
 export function BestsellersSection() {
+  // Get cart items to check current quantities
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+
   return (
     <section className="w-full py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-800 mb-4">
-            Bestsellers & Seasonal Products
+            Our Bestsellers
           </h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Discover our most popular products and seasonal favorites
+            Explore our most popular and highly-rated organic products
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-          {bestsellerProducts.map((product) => (
-            <div
-              key={product.id}
-              className="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group"
-            >
-              <div className="p-4">
-                <div className="w-full h-32 relative mb-4 overflow-hidden rounded-lg">
-                  <Image
-                    src={product.imageUrl}
-                    alt={product.name}
-                    fill
-                    className="object-contain group-hover:scale-105 transition-transform duration-300"
+          {bestsellerProducts.map((product) => {
+            // Get current quantity of this product in cart
+            const cartItem = cartItems.find((item) => item.id === product.id);
+            const currentQuantity = cartItem ? cartItem.quantity : 0;
+
+            return (
+              <div
+                key={product.id}
+                className="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group"
+              >
+                {/* Product Image - Clickable for details */}
+                <Link href={`/products/${product.id}`}>
+                  <div className="w-full h-32 relative mb-4 overflow-hidden rounded-lg cursor-pointer">
+                    <Image
+                      src={product.imageUrl}
+                      alt={product.name}
+                      fill
+                      className="object-contain group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                </Link>
+
+                {/* Product Info - Clickable for details */}
+                <Link href={`/products/${product.id}`}>
+                  <div className="px-4 cursor-pointer">
+                    <div className="mb-2">
+                      <span className="text-xs text-green-600 font-medium bg-green-50 px-2 py-1 rounded-full">
+                        {product.category}
+                      </span>
+                    </div>
+                    <h3 className="font-semibold text-gray-800 mb-2 line-clamp-2 text-sm group-hover:text-green-600 transition-colors">
+                      {product.name}
+                    </h3>
+                    <div className="mb-3">
+                      <p className="text-green-600 text-lg font-bold">
+                        ৳{product.price}
+                      </p>
+                      <p className="text-gray-500 text-xs">
+                        per {product.unit}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+
+                {/* Quantity Updater Component - Replaces the old Add to Cart button */}
+                <div className="px-4 pb-4">
+                  <QuantityUpdater
+                    product={{
+                      id: product.id,
+                      name: product.name,
+                      price: product.price,
+                      imageUrl: product.imageUrl,
+                      coverImage: product.imageUrl,
+                    }}
+                    currentQuantity={currentQuantity}
                   />
                 </div>
-
-                <div className="mb-4">
-                  <span className="text-xs text-green-600 font-medium bg-green-50 px-2 py-1 rounded-full">
-                    {product.category}
-                  </span>
-                </div>
-
-                <h3 className="font-semibold text-gray-800 mb-2 line-clamp-2 text-sm">
-                  {product.name}
-                </h3>
-
-                <p className="text-green-600 text-lg font-bold mb-4">
-                  ৳{product.price}
-                </p>
-
-                <Button
-                  className="w-full bg-green-600 hover:bg-green-700 text-white py-4 text-base font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
-                  variant="default"
-                >
-                  <ShoppingCart className="h-5 w-5 mr-3" />
-                  Add to Cart
-                </Button>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="text-center mt-8">
@@ -112,7 +103,7 @@ export function BestsellersSection() {
               size="lg"
               className="text-green-700 border-green-500 hover:bg-green-600 hover:text-white px-8 py-3"
             >
-              View All Products
+              Browse More Products
             </Button>
           </Link>
         </div>

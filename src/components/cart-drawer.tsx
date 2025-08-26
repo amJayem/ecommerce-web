@@ -60,9 +60,9 @@ export function CartDrawer() {
                 <Image
                   src={getSafeImageSrc(item.coverImage || item.imageUrl)}
                   alt={item.name}
-                  width={500}
-                  height={500}
-                  className="w-15 h-15 rounded-md object-cover"
+                  width={60}
+                  height={60}
+                  className="w-15 h-15 rounded-md object-cover flex-shrink-0"
                 />
                 <div className="flex-1">
                   <h4 className="font-medium text-base">{item?.name}</h4>

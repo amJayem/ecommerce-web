@@ -1,6 +1,6 @@
 // components/category-section.tsx
 
-import { categories } from "@/lib/data/categories";
+import { getCategoriesWithCounts } from "@/lib/products-data";
 import { Button } from "@/components/ui/button";
 import {
   LucideIcon,
@@ -37,6 +37,8 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 export function CategorySection() {
+  const categoriesWithCounts = getCategoriesWithCounts();
+
   return (
     <section className="w-full py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4">
@@ -51,28 +53,28 @@ export function CategorySection() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-8">
-          {categories.slice(0, 10).map(({ name, icon }) => {
-            const IconComponent = iconMap[icon];
-            if (!IconComponent) return null;
+          {categoriesWithCounts
+            .slice(0, 10)
+            .map(({ id, name, icon, productCount }) => {
+              const IconComponent = iconMap[icon];
+              if (!IconComponent) return null;
 
-            return (
-              <Link
-                href={`/products/categories/${name
-                  .toLowerCase()
-                  .replace(/\s+/g, "-")}`}
-                key={name}
-              >
-                <div className="flex flex-col items-center p-6 bg-green-50 rounded-xl hover:shadow-lg hover:bg-green-100 transition-all duration-300 group">
-                  <div className="p-3 bg-white rounded-full mb-4 group-hover:scale-110 transition-transform">
-                    <IconComponent size={28} className="text-green-600" />
+              return (
+                <Link href={`/products/categories/${id}`} key={id}>
+                  <div className="flex flex-col items-center p-6 bg-green-50 rounded-xl hover:shadow-lg hover:bg-green-100 transition-all duration-300 group">
+                    <div className="p-3 bg-white rounded-full mb-4 group-hover:scale-110 transition-transform">
+                      <IconComponent size={28} className="text-green-600" />
+                    </div>
+                    <span className="text-sm font-medium text-gray-700 text-center mb-2">
+                      {name}
+                    </span>
+                    <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full">
+                      {productCount} products
+                    </span>
                   </div>
-                  <span className="text-sm font-medium text-gray-700 text-center">
-                    {name}
-                  </span>
-                </div>
-              </Link>
-            );
-          })}
+                </Link>
+              );
+            })}
         </div>
 
         <div className="text-center">

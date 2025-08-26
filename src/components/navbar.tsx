@@ -23,7 +23,7 @@ export function Navbar() {
     { name: "Honey", href: "/products/categories/honey" },
     { name: "Nuts", href: "/products/categories/nuts" },
     { name: "Seeds", href: "/products/categories/seeds" },
-    { name: "Grocery", href: "/products/categories/grains" },
+    { name: "Grains", href: "/products/categories/grains" },
     { name: "See All", href: "/products/categories" },
   ];
 
@@ -33,7 +33,7 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Left: Logo */}
         <Link href="/" className="text-xl font-bold text-green-600">
-          GroceyFresh
+          GroceryFresh
         </Link>
 
         {/* Center: Search Bar */}

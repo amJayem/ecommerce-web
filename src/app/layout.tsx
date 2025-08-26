@@ -1,20 +1,20 @@
-'use client'
+"use client";
 
-import { CartDrawer } from '@/components/cart-drawer'
-import { Footer } from '@/components/footer'
-import { Navbar } from '@/components/navbar'
-import { store } from '@/store'
-import { Provider } from 'react-redux'
-import { Toaster } from 'react-hot-toast'
-import './globals.css'
+import { CartDrawer } from "@/components/cart-drawer";
+import { Footer } from "@/components/footer";
+import { Navbar } from "@/components/navbar";
+import { store } from "@/store";
+import { Provider } from "react-redux";
+import { Toaster } from "react-hot-toast";
+import "./globals.css";
 
 export default function RootLayout({
-  children
+  children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <body>
         <Provider store={store}>
           <Navbar />
@@ -26,5 +26,5 @@ export default function RootLayout({
         </Provider>
       </body>
     </html>
-  )
+  );
 }
