@@ -5,7 +5,10 @@ const imageDomains =
     domain.trim()
   ) || [];
 
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 console.log("imageDomains", imageDomains);
+console.log("apiBaseUrl", [apiBaseUrl]);
 
 const nextConfig: NextConfig = {
   images: {

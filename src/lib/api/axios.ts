@@ -11,9 +11,8 @@ const api = axios.create({
 });
 
 // Debug: Log the base URL (only in development)
-if (isDev) {
-  console.log("API Base URL:", process.env.NEXT_PUBLIC_API_BASE_URL);
-}
+
+console.log("API Base URL:", process.env.NEXT_PUBLIC_API_BASE_URL);
 
 api.interceptors.response.use(
   (res) => res,
