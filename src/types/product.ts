@@ -1,5 +1,7 @@
 // Product type updated to match backend model
 export interface Product {
+  metaDescription: string | undefined;
+  metaTitle: string;
   id: number; // Unique product ID
   name: string; // Product name
   slug: string; // SEO-friendly URL slug (e.g., "organic-honey-500g")
@@ -25,6 +27,7 @@ export interface Product {
   stock: number; // Current stock quantity
   sku?: string; // Stock Keeping Unit (unique code for inventory)
   isFeatured?: boolean; // Highlight product on homepage or special section
+  featured?: boolean; // Highlight product on homepage or special section
   isNewArrival?: boolean; // Mark as new arrival
 
   ratings?: number; // Average rating (1–5)

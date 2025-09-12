@@ -1,6 +1,6 @@
 // components/category-section.tsx
 
-import { getCategoriesWithCounts } from "@/lib/products-data";
+import { Category } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import {
   LucideIcon,
@@ -36,9 +36,11 @@ const iconMap: Record<string, LucideIcon> = {
   Home,
 };
 
-export function CategorySection() {
-  const categoriesWithCounts = getCategoriesWithCounts();
+interface CategorySectionProps {
+  categories: Category[];
+}
 
+export function CategorySection({ categories }: CategorySectionProps) {
   return (
     <section className="w-full py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4">
@@ -53,28 +55,33 @@ export function CategorySection() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-8">
-          {categoriesWithCounts
-            .slice(0, 10)
-            .map(({ id, name, icon, productCount }) => {
-              const IconComponent = iconMap[icon];
-              if (!IconComponent) return null;
+          {categories.slice(0, 10).map(({ id, name, icon, productCount }) => {
+            // Check if icon is an emoji (contains non-ASCII characters)
+            const isEmoji = icon && /[^\x00-\x7F]/.test(icon);
+            const IconComponent = !isEmoji ? iconMap[icon || "Apple"] : null;
 
-              return (
-                <Link href={`/products/categories/${id}`} key={id}>
-                  <div className="flex flex-col items-center p-6 bg-green-50 rounded-xl hover:shadow-lg hover:bg-green-100 transition-all duration-300 group">
-                    <div className="p-3 bg-white rounded-full mb-4 group-hover:scale-110 transition-transform">
+            return (
+              <Link href={`/products/categories/${id}`} key={id}>
+                <div className="flex flex-col items-center p-6 bg-green-50 rounded-xl hover:shadow-lg hover:bg-green-100 transition-all duration-300 group">
+                  <div className="p-3 bg-white rounded-full mb-4 group-hover:scale-110 transition-transform">
+                    {isEmoji ? (
+                      <span className="text-3xl">{icon}</span>
+                    ) : IconComponent ? (
                       <IconComponent size={28} className="text-green-600" />
-                    </div>
-                    <span className="text-sm font-medium text-gray-700 text-center mb-2">
-                      {name}
-                    </span>
-                    <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full">
-                      {productCount} products
-                    </span>
+                    ) : (
+                      <span className="text-2xl">📦</span>
+                    )}
                   </div>
-                </Link>
-              );
-            })}
+                  <span className="text-sm font-medium text-gray-700 text-center mb-2">
+                    {name}
+                  </span>
+                  <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full">
+                    {productCount || 0} products
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
         </div>
 
         <div className="text-center">

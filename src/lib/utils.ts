@@ -7,7 +7,8 @@ export function cn(...inputs: ClassValue[]) {
 
 // Returns a safe image src. Falls back to placeholder for invalid or non-image URLs
 export function getSafeImageSrc(src?: string) {
-  const placeholder = "/img/placeholder_image.png";
+  const placeholder =
+    "https://cdn.shopify.com/s/files/1/0850/9797/2012/files/placeholder_image.webp?v=1757652031";
   if (!src || typeof src !== "string") return placeholder;
 
   // Allow static public assets and data URLs
