@@ -34,7 +34,7 @@ export function ValueProposition() {
             Why Choose GroceryFresh?
           </h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            We're committed to delivering the best shopping experience with
+            We&apos;re committed to delivering the best shopping experience with
             quality products and exceptional service
           </p>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { products } from "@/lib/products-data";
+import { Product } from "@/types/product";
 import { Button } from "@/components/ui/button";
 import { QuantityUpdater } from "./quantity-updater";
 import { useSelector } from "react-redux";
@@ -8,16 +8,13 @@ import { RootState } from "@/store";
 import Image from "next/image";
 import Link from "next/link";
 
-// Get bestseller products (mix of different categories for variety)
-const bestsellerProducts = [
-  ...products.filter((p) => p.categoryId === "fruits").slice(0, 2),
-  ...products.filter((p) => p.categoryId === "honey").slice(0, 1),
-  ...products.filter((p) => p.categoryId === "oils").slice(0, 1),
-  ...products.filter((p) => p.categoryId === "dairy").slice(0, 1),
-  ...products.filter((p) => p.categoryId === "spices").slice(0, 1),
-].slice(0, 6);
+interface BestsellersSectionProps {
+  bestsellerProducts: Product[];
+}
 
-export function BestsellersSection() {
+export function BestsellersSection({
+  bestsellerProducts,
+}: BestsellersSectionProps) {
   // Get cart items to check current quantities
   const cartItems = useSelector((state: RootState) => state.cart.items);
 
@@ -71,9 +68,11 @@ export function BestsellersSection() {
                       <p className="text-green-600 text-lg font-bold">
                         ৳{product.price}
                       </p>
-                      <p className="text-gray-500 text-xs">
-                        per {product.unit}
-                      </p>
+                      {product.unit && (
+                        <p className="text-gray-500 text-xs">
+                          per {product.unit}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </Link>
@@ -86,7 +85,7 @@ export function BestsellersSection() {
                       name: product.name,
                       price: product.price,
                       imageUrl: product.imageUrl,
-                      coverImage: product.imageUrl,
+                      coverImage: product.coverImage || product.imageUrl,
                     }}
                     currentQuantity={currentQuantity}
                   />

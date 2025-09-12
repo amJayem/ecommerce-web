@@ -88,14 +88,24 @@ export async function getCategories(): Promise<Category[]> {
 
     if (Array.isArray(data)) {
       // Transform your API response to match the expected Category interface
-      return data.map((category: Category) => ({
-        id: category.id.toString(), // Convert number to string
-        name: category.name,
-        icon: category.icon || "Package", // Use emoji icon or fallback
-        productCount: category.productCount || 0, // Get product count from _count
-        metaTitle: category.metaTitle,
-        metaDescription: category.metaDescription,
-      }));
+      return data.map((category: unknown) => {
+        const cat = category as {
+          id: number;
+          name: string;
+          icon?: string;
+          _count?: { products: number };
+          metaTitle?: string;
+          metaDescription?: string;
+        };
+        return {
+          id: cat.id.toString(), // Convert number to string
+          name: cat.name,
+          icon: cat.icon || "Package", // Use emoji icon or fallback
+          productCount: cat._count?.products || 0, // Get product count from _count
+          metaTitle: cat.metaTitle,
+          metaDescription: cat.metaDescription,
+        };
+      });
     }
 
     return [];
