@@ -19,7 +19,7 @@ api.interceptors.response.use(
   (err) => {
     // Better error logging (dev only to reduce build noise)
     if (isDev) {
-      console.error("API Error:", {
+      console.log("API Error:", {
         message: err.message,
         status: err.response?.status,
         url: err.config?.url,

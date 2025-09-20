@@ -17,6 +17,7 @@ import { QuantityUpdater } from "@/components/quantity-updater";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import Image from "next/image";
+import { getSafeImageSrc } from "@/lib/utils";
 
 interface ProductPageClientProps {
   product: Product;
@@ -55,10 +56,10 @@ ProductPageClientProps) {
           </Link>
           <span>/</span>
           <Link
-            href={`/products/categories/${product.category.toLowerCase()}`}
+            href={`/products/categories/${product.categoryId}`}
             className="hover:text-green-600"
           >
-            {product.category}
+            {product.categoryId}
           </Link>
           <span>/</span>
           <span className="text-gray-800">{product.name}</span>
@@ -69,14 +70,16 @@ ProductPageClientProps) {
         {/* Product Image */}
         <div className="space-y-4">
           <div className="relative">
-            {product.discount && (
+            {product.discount ? (
               <div className="absolute top-4 left-4 bg-red-500 text-white text-sm px-3 py-1 rounded-full z-10">
                 {product.discount}% OFF
               </div>
+            ) : (
+              ""
             )}
             <div className="w-full h-96 bg-white border rounded-xl overflow-hidden relative">
               <Image
-                src={product.imageUrl}
+                src={product.coverImage || product.imageUrl}
                 alt={product.name}
                 fill
                 className="object-contain p-4"
@@ -232,7 +235,9 @@ ProductPageClientProps) {
                   <Link href={`/products/${relatedProduct.id}`}>
                     <div className="w-full h-32 relative mb-4 overflow-hidden rounded-lg">
                       <Image
-                        src={relatedProduct.imageUrl}
+                        src={getSafeImageSrc(
+                          relatedProduct.coverImage || relatedProduct.imageUrl
+                        )}
                         alt={relatedProduct.name}
                         fill
                         className="object-contain hover:scale-105 transition-transform duration-300"

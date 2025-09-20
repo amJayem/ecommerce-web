@@ -41,7 +41,7 @@ export default async function HomePage() {
   const safeBestsellerProducts = Array.isArray(bestsellerProducts)
     ? bestsellerProducts
     : [];
-  console.log({ safeCategories });
+  // console.log({ safeCategories });
   // Get first 30 products for store products section
   const storeProducts = safeProducts.slice(0, 30);
 

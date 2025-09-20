@@ -45,7 +45,7 @@ export function BestsellersSection({
                 <Link href={`/products/${product.id}`}>
                   <div className="w-full h-32 relative mb-4 overflow-hidden rounded-lg cursor-pointer">
                     <Image
-                      src={product.imageUrl}
+                      src={product.coverImage || product.imageUrl}
                       alt={product.name}
                       fill
                       className="object-contain group-hover:scale-105 transition-transform duration-300"

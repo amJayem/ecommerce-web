@@ -268,9 +268,7 @@ export async function getBestsellerProducts(): Promise<Product[]> {
       return [];
     }
     // For now, return products with high ratings as bestsellers
-    return products
-      .filter((product) => product.ratings && product.ratings >= 4.5)
-      .slice(0, 8); // Limit to 8 bestsellers
+    return products.filter((product) => product.bestseller).slice(0, 8); // Limit to 8 bestsellers
   } catch (error) {
     console.error("Error fetching bestseller products:", error);
     return []; // Return empty array instead of throwing

@@ -19,7 +19,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   // Get related products from the same category
-  const relatedProducts = await fetchProductsByCategorySSR(product.category);
+  const relatedProducts = await fetchProductsByCategorySSR(
+    product.categoryId.toString()
+  );
   const filteredRelatedProducts = relatedProducts
     .filter((p) => p.id !== product.id)
     .slice(0, 4);

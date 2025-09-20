@@ -17,6 +17,7 @@ export interface Product {
   coverImage?: string; // Cover/banner image for product detail page
   gallery?: string[]; // Multiple product images
 
+  categoryId: number;
   category: string; // Product category (e.g., "Fruits", "Beverages")
   subCategory?: string; // Sub-category (optional)
 
@@ -29,6 +30,7 @@ export interface Product {
   isFeatured?: boolean; // Highlight product on homepage or special section
   featured?: boolean; // Highlight product on homepage or special section
   isNewArrival?: boolean; // Mark as new arrival
+  bestseller?: boolean; // Mark as bestseller
 
   ratings?: number; // Average rating (1–5)
   reviewsCount?: number; // Number of reviews
