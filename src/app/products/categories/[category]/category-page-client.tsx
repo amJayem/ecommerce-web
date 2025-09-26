@@ -9,6 +9,7 @@ import { QuantityUpdater } from "@/components/quantity-updater";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import Image from "next/image";
+import { getSafeImageSrc } from "@/lib/utils";
 
 interface CategoryPageClientProps {
   category: Category;
@@ -61,17 +62,21 @@ CategoryPageClientProps) {
                 key={product.id}
                 className="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 p-4 relative group"
               >
-                {product.discount && (
+                {product.discount ? (
                   <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded z-10">
                     {product.discount}% OFF
                   </div>
+                ) : (
+                  ""
                 )}
 
                 {/* Product Image - Clickable for details */}
                 <Link href={`/products/${product.id}`}>
                   <div className="w-full h-40 relative mb-4 overflow-hidden rounded-lg cursor-pointer">
                     <Image
-                      src={product.imageUrl}
+                      src={getSafeImageSrc(
+                        product.coverImage || product.imageUrl
+                      )}
                       alt={product.name}
                       fill
                       className="object-contain group-hover:scale-105 transition-transform duration-300"
