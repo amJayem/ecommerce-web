@@ -18,7 +18,7 @@ export interface Product {
   gallery?: string[]; // Multiple product images
 
   categoryId: number;
-  category: string; // Product category (e.g., "Fruits", "Beverages")
+  category: string | { id: number; name: string; slug: string; icon: string }; // Product category (string or object)
   subCategory?: string; // Sub-category (optional)
 
   brand?: string; // Brand name (if applicable)

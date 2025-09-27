@@ -10,15 +10,18 @@ interface CategoryPageProps {
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
-  const { category: categoryId } = await params;
+  const { category: categoryParam } = await params;
 
   // Fetch categories and products in parallel
   const [categories, categoryProducts] = await Promise.all([
     fetchCategoriesSSR(),
-    fetchProductsByCategorySSR(categoryId),
+    fetchProductsByCategorySSR(categoryParam),
   ]);
 
-  const category = categories.find((cat) => cat.id === categoryId);
+  // Try to find category by ID first, then by slug
+  const category = categories.find(
+    (cat) => cat.id === categoryParam || cat.slug === categoryParam
+  );
 
   if (!category) {
     notFound();

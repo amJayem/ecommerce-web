@@ -8,6 +8,7 @@ import api from "./api/axios";
 export interface Category {
   id: string;
   name: string;
+  slug?: string; // URL-friendly identifier
   icon?: string; // Can be emoji (🌾) or Lucide icon name (Apple)
   productCount?: number;
   metaTitle?: string;
@@ -42,21 +43,30 @@ export async function getProducts(): Promise<Product[]> {
 }
 
 /**
- * Fetch products by category ID
- * GET /api/products?categoryId={categoryId}
+ * Fetch products by category ID or slug
+ * GET /api/products?categoryId={categoryId} or GET /api/products?categorySlug={slug}
  */
 export async function getProductsByCategory(
-  categoryId: string
+  categoryParam: string
 ): Promise<Product[]> {
   try {
-    const response = await api.get(`/products?categoryId=${categoryId}`);
+    // Try to determine if it's an ID (numeric) or slug (string)
+    const isNumeric = /^\d+$/.test(categoryParam);
+    const endpoint = isNumeric
+      ? `/products?categoryId=${categoryParam}`
+      : `/products?categorySlug=${categoryParam}`;
+
+    const response = await api.get(endpoint);
     // Handle different response formats - your API returns { products: [...], pagination: {...} }
     const data =
       response.data?.products || response.data?.data || response.data || [];
     return Array.isArray(data) ? data : [];
   } catch (error) {
-    console.error(`Error fetching products for category ${categoryId}:`, error);
-    throw new Error(`Failed to fetch products for category ${categoryId}`);
+    console.error(
+      `Error fetching products for category ${categoryParam}:`,
+      error
+    );
+    throw new Error(`Failed to fetch products for category ${categoryParam}`);
   }
 }
 
@@ -92,6 +102,7 @@ export async function getCategories(): Promise<Category[]> {
         const cat = category as {
           id: number;
           name: string;
+          slug?: string;
           icon?: string;
           _count?: { products: number };
           metaTitle?: string;
@@ -100,6 +111,7 @@ export async function getCategories(): Promise<Category[]> {
         return {
           id: cat.id.toString(), // Convert number to string
           name: cat.name,
+          slug: cat.slug, // Include slug for URL routing
           icon: cat.icon || "Package", // Use emoji icon or fallback
           productCount: cat._count?.products || 0, // Get product count from _count
           metaTitle: cat.metaTitle,
@@ -168,13 +180,13 @@ export async function fetchProductsSSR(): Promise<Product[]> {
  * Use this in server components and getServerSideProps
  */
 export async function fetchProductsByCategorySSR(
-  categoryId: string
+  categoryParam: string
 ): Promise<Product[]> {
   try {
-    return await getProductsByCategory(categoryId);
+    return await getProductsByCategory(categoryParam);
   } catch (error) {
     console.error(
-      `SSR: Error fetching products for category ${categoryId}:`,
+      `SSR: Error fetching products for category ${categoryParam}:`,
       error
     );
     // Return empty array as fallback for SSR

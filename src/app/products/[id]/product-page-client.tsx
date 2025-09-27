@@ -56,10 +56,16 @@ ProductPageClientProps) {
           </Link>
           <span>/</span>
           <Link
-            href={`/products/categories/${product.categoryId}`}
+            href={`/products/categories/${
+              typeof product.category === "object"
+                ? product.category.slug
+                : product.categoryId
+            }`}
             className="hover:text-green-600"
           >
-            {product.categoryId}
+            {typeof product.category === "object"
+              ? product.category.name
+              : product.categoryId}
           </Link>
           <span>/</span>
           <span className="text-gray-800">{product.name}</span>
@@ -79,7 +85,7 @@ ProductPageClientProps) {
             )}
             <div className="w-full h-96 bg-white border rounded-xl overflow-hidden relative">
               <Image
-                src={product.coverImage || product.imageUrl}
+                src={getSafeImageSrc(product.coverImage || product.imageUrl)}
                 alt={product.name}
                 fill
                 className="object-contain p-4"
@@ -154,7 +160,11 @@ ProductPageClientProps) {
             <div className="flex items-center gap-2">
               <Package className="w-4 h-4 text-gray-500" />
               <span className="text-gray-600">Category:</span>
-              <span className="font-medium">{product.category}</span>
+              <span className="font-medium">
+                {typeof product.category === "object"
+                  ? product.category.name
+                  : product.categoryId}
+              </span>
             </div>
             {product.weight && (
               <div className="flex items-center gap-2">
