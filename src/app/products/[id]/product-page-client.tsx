@@ -131,7 +131,7 @@ ProductPageClientProps) {
               )}
             </div>
 
-            {product.discount && product.discount > 0 && (
+            {product.discount && product.discount > 0 ? (
               <div className="flex items-center gap-2">
                 <span className="text-red-500 font-medium">
                   -{product.discount}% OFF
@@ -142,7 +142,7 @@ ProductPageClientProps) {
                   </span>
                 )}
               </div>
-            )}
+            ) : null}
           </div>
 
           {/* Short Description */}
@@ -184,6 +184,7 @@ ProductPageClientProps) {
                 price: product.price,
                 imageUrl: product.imageUrl,
                 coverImage: product.coverImage || product.imageUrl,
+                stock: product.stock,
               }}
               currentQuantity={currentQuantity}
               className="max-w-md"
@@ -276,6 +277,7 @@ ProductPageClientProps) {
                       imageUrl: relatedProduct.imageUrl,
                       coverImage:
                         relatedProduct.coverImage || relatedProduct.imageUrl,
+                      stock: relatedProduct.stock,
                     }}
                     currentQuantity={relatedCurrentQuantity}
                   />

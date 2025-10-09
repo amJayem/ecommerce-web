@@ -16,6 +16,7 @@ interface QuantityUpdaterProps {
     price: number;
     imageUrl: string;
     coverImage?: string;
+    stock: number;
   };
   currentQuantity: number;
   className?: string;
@@ -32,7 +33,11 @@ export function QuantityUpdater({
   if (currentQuantity === 0) {
     return (
       <Button
-        className={`w-full bg-green-600 hover:bg-green-700 text-white py-4 text-base font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 ${className}`}
+        className={`w-full bg-green-600 ${
+          product.stock < 1
+            ? "opacity-50 cursor-not-allowed"
+            : "hover:bg-green-700 text-white py-4 text-base font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 ${className}"
+        } `}
         onClick={() => dispatch(addToCart(product))}
       >
         Add to Cart
