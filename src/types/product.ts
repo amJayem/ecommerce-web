@@ -11,6 +11,7 @@ export interface Product {
 
   price: number; // Current selling price
   oldPrice?: number; // Previous price (for discounts)
+  originalPrice?: number; // Original price before discount
   discount?: number; // Discount percentage (if applicable)
 
   imageUrl: string; // Primary product image
@@ -26,6 +27,9 @@ export interface Product {
   unit?: string; // Unit type ("kg", "g", "ml", "L", "pcs")
 
   stock: number; // Current stock quantity
+  inStock?: boolean; // Whether product is in stock
+  isActive?: boolean; // Whether product is active
+  status?: string; // Product status (e.g., "published")
   sku?: string; // Stock Keeping Unit (unique code for inventory)
   isFeatured?: boolean; // Highlight product on homepage or special section
   featured?: boolean; // Highlight product on homepage or special section
