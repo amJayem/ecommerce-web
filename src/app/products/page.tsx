@@ -1,6 +1,6 @@
 // All Products page showing complete product catalog with enhanced UX
 import { fetchCategoriesSSR } from "@/lib/api";
-import AllProductsPageClientV2 from "./all-products-page-client-v2";
+import AllProductsPageClient from "./all-products-page-client";
 
 export default async function AllProductsPage() {
   // Fetch categories from API for filtering
@@ -12,7 +12,7 @@ export default async function AllProductsPage() {
   };
 
   return (
-    <AllProductsPageClientV2
+    <AllProductsPageClient
       initialProducts={[]}
       categories={categories}
       metadata={metadata}
