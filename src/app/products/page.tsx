@@ -1,6 +1,8 @@
 // All Products page showing complete product catalog with enhanced UX
 import { fetchCategoriesSSR } from "@/lib/api";
 import AllProductsPageClient from "./all-products-page-client";
+import { Suspense } from "react";
+import { ProductGridSkeleton } from "@/components/product-skeleton";
 
 export default async function AllProductsPage() {
   // Fetch categories from API for filtering
@@ -12,10 +14,12 @@ export default async function AllProductsPage() {
   };
 
   return (
-    <AllProductsPageClient
-      initialProducts={[]}
-      categories={categories}
-      metadata={metadata}
-    />
+    <Suspense fallback={<ProductGridSkeleton count={12} />}>
+      <AllProductsPageClient
+        initialProducts={[]}
+        categories={categories}
+        metadata={metadata}
+      />
+    </Suspense>
   );
 }

@@ -120,6 +120,7 @@ CategoryPageClientProps) {
                     price: product.price,
                     imageUrl: product.imageUrl,
                     coverImage: product.coverImage || product.imageUrl,
+                    stock: product.stock,
                   }}
                   currentQuantity={currentQuantity}
                 />

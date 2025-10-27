@@ -17,6 +17,7 @@ export interface SearchFilters {
   q?: string;
   page?: number;
   limit?: number;
+  stock?: number;
 }
 
 export interface SearchResponse {

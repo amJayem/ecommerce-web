@@ -80,6 +80,7 @@ export default async function HomePage() {
               discount: product.discount,
               unit: product.unit,
               shortDescription: product.shortDescription,
+              stock: product.stock,
             }))}
           />
 
@@ -126,6 +127,7 @@ export default async function HomePage() {
                 discount: product.discount,
                 unit: product.unit,
                 shortDescription: product.shortDescription,
+                stock: product.stock,
               }))}
             />
           </div>
