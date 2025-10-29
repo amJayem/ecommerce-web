@@ -9,7 +9,20 @@ export interface CreateOrderItem {
 
 export interface CreateOrder {
   items: CreateOrderItem[]; // List of items in the order
-  total: number; // Total order price
+  // Pricing summary
+  subtotal: number;
+  shipping?: number;
+  discount?: number;
+  tax?: number;
+  totalAmount: number;
+  // Customer and delivery
+  fullName?: string;
+  phone?: string;
+  shippingAddress?: string;
+  billingAddress?: string;
+  deliveryInstructions?: string;
+  estimatedDelivery?: string; // ISO date string
+  paymentMethod?: string; // e.g., 'COD' | 'ONLINE'
   status?: string; // Optional order status (default: 'pending')
 }
 
@@ -30,4 +43,4 @@ export interface OrderItem {
   productId: number;
   quantity: number;
   price: number;
-} 
+}

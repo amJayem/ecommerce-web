@@ -12,10 +12,13 @@ import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash2, ShoppingCart, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { getSafeImageSrc } from "@/lib/utils";
 
 export default function CartPage() {
   const { items } = useSelector((state: RootState) => state.cart);
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const total = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -68,7 +71,7 @@ export default function CartPage() {
               {/* Product Image */}
               <div className="w-20 h-20 relative flex-shrink-0">
                 <Image
-                  src={item.imageUrl}
+                  src={getSafeImageSrc(item.coverImage || item.imageUrl)}
                   alt={item.name}
                   fill
                   className="object-contain rounded-lg"
@@ -82,7 +85,7 @@ export default function CartPage() {
                 </h3>
                 <div className="flex items-center gap-2 mb-2">
                   <p className="text-green-600 font-bold text-lg">
-                    ৳{item.price}
+                    ৳{item.price.toFixed(2)}
                   </p>
                   <span className="text-gray-500 text-sm">per unit</span>
                 </div>
@@ -163,12 +166,15 @@ export default function CartPage() {
               </div>
             </div>
 
-            <Button className="w-full bg-green-600 hover:bg-green-700 text-white py-3 text-lg font-semibold rounded-lg">
+            <Button
+              onClick={() => router.push("/checkout")}
+              className="w-full bg-green-600 hover:bg-green-700 text-white py-3 text-lg font-semibold rounded-lg"
+            >
               Proceed to Checkout
             </Button>
 
             <div className="mt-4 text-center">
-              <Link href="/products/categories">
+              <Link href="/products">
                 <Button variant="outline" className="w-full">
                   Continue Shopping
                 </Button>
