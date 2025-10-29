@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// Returns a safe image src. Falls back to placeholder for invalid or non-image URLs
+// Returns a safe image src. Falls back to placeholder for clearly invalid URLs
 export function getSafeImageSrc(src?: string) {
   const placeholder =
     "https://cdn.shopify.com/s/files/1/0850/9797/2012/files/placeholder_image.webp?v=1757652031";
@@ -17,15 +17,13 @@ export function getSafeImageSrc(src?: string) {
 
   try {
     const parsed = new URL(src);
+    // Only allow http(s) protocols
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+      return placeholder;
+    }
 
-    // Disallow obvious non-image app routes (e.g., dashboard pages)
-    if (parsed.pathname.includes("/dashboard")) return placeholder;
-
-    // Accept only common image extensions
-    const isImagePath = /\.(png|jpe?g|webp|gif|svg)$/i.test(parsed.pathname);
-    if (!isImagePath) return placeholder;
-
-    return src;
+    // If it is a valid http(s) URL, trust it (file extensions may be missing on many CDNs/APIs)
+    return parsed.toString();
   } catch {
     // Not a valid URL
     return placeholder;
