@@ -7,23 +7,34 @@ export interface CreateOrderItem {
   price: number; // Price per item at time of order
 }
 
+export interface OrderAddress {
+  name: string;
+  phone: string;
+  address1: string;
+  address2?: string;
+  city: string;
+  postalCode: string;
+  note?: string;
+}
+
+// Used for submitting a new order
 export interface CreateOrder {
-  items: CreateOrderItem[]; // List of items in the order
-  // Pricing summary
+  // Optionally add userId for logged-in user checkout
+  userId?: number;
+  items: CreateOrderItem[];
   subtotal: number;
-  shipping?: number;
+  shippingCost?: number;
   discount?: number;
   tax?: number;
   totalAmount: number;
-  // Customer and delivery
-  fullName?: string;
-  phone?: string;
-  shippingAddress?: string;
-  billingAddress?: string;
-  deliveryInstructions?: string;
-  estimatedDelivery?: string; // ISO date string
-  paymentMethod?: string; // e.g., 'COD' | 'ONLINE'
-  status?: string; // Optional order status (default: 'pending')
+  shippingAddress: OrderAddress;
+  shippingAddressText?: string;
+  billingAddress: Omit<OrderAddress, "note">;
+  paymentMethod: string;
+  paymentStatus?: string;
+  status?: string;
+  deliveryNote?: string;
+  estimatedDelivery?: string;
 }
 
 // Used for displaying order data (if needed)

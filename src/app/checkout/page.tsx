@@ -42,32 +42,70 @@ export default function CheckoutPage() {
   const [deliveryDate, setDeliveryDate] = useState<string>("");
   const [paymentMethod, setPaymentMethod] = useState<"COD" | "ONLINE">("COD");
 
+  // Derived validation state for shipping address
+  const isShippingValid =
+    fullName.trim().length > 0 &&
+    phone.trim().length > 0 &&
+    address1.trim().length > 0 &&
+    city.trim().length > 0 &&
+    postalCode.trim().length > 0;
+
   async function handlePlaceOrder() {
     if (cartItems.length === 0) return;
+    if (!isShippingValid) {
+      toast.error("Please fill in all required shipping details.");
+      return;
+    }
     setLoading(true);
     try {
-      const shippingAddress = `${address1}${
-        address2 ? ", " + address2 : ""
-      }, ${city} ${postalCode}`.trim();
-      // Prepare order payload
+      // Prepare nested address objects
+      const shippingAddress = {
+        name: fullName,
+        phone,
+        address1,
+        address2: address2 || undefined,
+        city,
+        postalCode,
+        note: instructions || undefined,
+      };
+      const billingAddress = {
+        name: fullName,
+        phone,
+        address1,
+        address2: address2 || undefined,
+        city,
+        postalCode,
+      };
+      const shippingAddressText = [
+        fullName,
+        address1,
+        address2?.trim(),
+        `${city} ${postalCode}`.trim(),
+      ]
+        .filter(Boolean)
+        .join(", ");
+      // Prepare order payload in new format
       const orderPayload = {
         items: cartItems.map((item) => ({
           productId: item.id,
           quantity: item.quantity,
           price: item.price,
         })),
-        subtotal,
-        shipping: deliveryCost,
-        discount,
-        tax,
-        totalAmount,
-        fullName,
-        phone,
         shippingAddress,
-        billingAddress: shippingAddress,
-        deliveryInstructions: instructions || undefined,
-        estimatedDelivery: deliveryDate || undefined,
+        shippingAddressText,
+        billingAddress,
         paymentMethod,
+        paymentStatus: "PENDING",
+        status: "PENDING",
+        deliveryNote: instructions || undefined,
+        estimatedDelivery: deliveryDate
+          ? new Date(deliveryDate).toISOString()
+          : undefined,
+        subtotal,
+        tax,
+        shippingCost: deliveryCost,
+        discount,
+        totalAmount,
       };
       // Call backend API to place order
       await submitOrder(orderPayload);
@@ -281,7 +319,7 @@ export default function CheckoutPage() {
                 <Button
                   onClick={handlePlaceOrder}
                   className="w-full"
-                  disabled={loading}
+                  disabled={loading || !isShippingValid}
                 >
                   {loading ? "Placing Order..." : "🛍️ Place Order"}
                 </Button>
