@@ -88,10 +88,11 @@ export function ProductSearchFilters({
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Price Range (৳)
           </label>
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <input
               type="number"
               placeholder="Min"
+              min="0"
               value={minPrice || ""}
               onChange={(e) =>
                 onPriceChange(
@@ -99,20 +100,23 @@ export function ProductSearchFilters({
                   maxPrice
                 )
               }
-              className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full sm:flex-1 px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm sm:text-base"
             />
-            <span className="self-center text-gray-400">-</span>
+            <span className="self-center text-gray-400 hidden sm:inline">
+              -
+            </span>
             <input
               type="number"
               placeholder="Max"
-              value={maxPrice || ""}
+              min="0"
+              value={maxPrice === 10000 ? "" : maxPrice || ""}
               onChange={(e) =>
                 onPriceChange(
                   minPrice,
                   e.target.value ? parseInt(e.target.value) : 10000
                 )
               }
-              className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full sm:flex-1 px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm sm:text-base"
             />
           </div>
         </div>

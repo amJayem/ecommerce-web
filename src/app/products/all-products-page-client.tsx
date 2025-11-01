@@ -123,12 +123,14 @@ export default function AllProductsPageClient({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-green-600 to-green-700 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold mb-6">All Products</h1>
-          <p className="text-xl text-green-100 max-w-3xl mx-auto mb-8">
+      <div className="bg-gradient-to-r from-green-600 to-green-700 text-white py-8 md:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6">
+            All Products
+          </h1>
+          <p className="text-base sm:text-lg md:text-xl text-green-100 max-w-3xl mx-auto mb-6 md:mb-8 px-2">
             Browse our complete collection of fresh, organic products. Find
             everything you need for your healthy lifestyle.
           </p>
@@ -136,7 +138,7 @@ export default function AllProductsPageClient({
       </div>
 
       {/* Page Content */}
-      <div className="max-w-7xl mx-auto py-8 px-4">
+      <div className="max-w-7xl mx-auto py-6 md:py-8 px-4 sm:px-6">
         {/* Search and Filters */}
         <ProductSearchFilters
           searchQuery={searchQuery}
@@ -167,7 +169,7 @@ export default function AllProductsPageClient({
         {/* Products Grid */}
         {!isLoading && products.length > 0 && (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
               {products.map((product) => {
                 const cartItem = cartItems.find(
                   (item) => item.id === product.id
