@@ -1,5 +1,6 @@
 // store/cartSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { loadCartFromStorage } from "@/lib/storage";
 
 type CartItem = {
   id: number;
@@ -15,10 +16,22 @@ type CartState = {
   isOpen: boolean;
 };
 
-const initialState: CartState = {
-  items: [],
-  isOpen: false,
+// Load initial state from localStorage if available and not expired
+const loadInitialState = (): CartState => {
+  const stored = loadCartFromStorage();
+  if (stored) {
+    return {
+      items: (stored.items as CartItem[]) || [],
+      isOpen: stored.isOpen || false,
+    };
+  }
+  return {
+    items: [],
+    isOpen: false,
+  };
 };
+
+const initialState: CartState = loadInitialState();
 
 export const cartSlice = createSlice({
   name: "cart",
