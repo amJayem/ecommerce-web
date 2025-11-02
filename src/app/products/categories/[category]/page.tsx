@@ -1,5 +1,6 @@
 // Dynamic category page showing products for a specific category
 import { fetchCategoriesSSR, fetchProductsByCategorySSR } from "@/lib/api";
+import { Product } from "@/types/product";
 import CategoryPageClient from "./category-page-client";
 
 interface CategoryPageProps {
@@ -12,54 +13,115 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const { category: categoryParam } = await params;
 
   // Fetch categories and products in parallel
-  const [categories, categoryProducts] = await Promise.all([
-    fetchCategoriesSSR(),
-    fetchProductsByCategorySSR(categoryParam).catch(() => []), // Ensure we always get an array
-  ]);
+  let categoryProducts: Product[] = [];
 
-  // Ensure categoryProducts is always an array
-  const safeCategoryProducts = Array.isArray(categoryProducts)
-    ? categoryProducts
-    : [];
+  try {
+    const [categories, products] = await Promise.all([
+      fetchCategoriesSSR(),
+      fetchProductsByCategorySSR(categoryParam),
+    ]);
 
-  // Try to find category by ID first, then by slug (case-insensitive)
-  const category =
-    categories.find(
-      (cat) =>
-        cat.id === categoryParam ||
-        cat.slug?.toLowerCase() === categoryParam.toLowerCase() ||
-        cat.name?.toLowerCase().replace(/\s+/g, "-") ===
-          categoryParam.toLowerCase()
-    ) || null;
+    // Ensure categoryProducts is always an array
+    categoryProducts = Array.isArray(products) ? products : [];
 
-  // If category not found, create a temporary category object to still show the page
-  // This handles cases where the category exists in backend but slug doesn't match exactly
-  const displayCategory = category || {
-    id: categoryParam,
-    name: categoryParam
-      .split("-")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" "),
-    slug: categoryParam,
-    icon: "Package",
-    productCount: safeCategoryProducts.length,
-  };
+    // Log for debugging in production
+    if (process.env.NODE_ENV === "production") {
+      console.log(
+        `[Category Page] Category: ${categoryParam}, Products found: ${categoryProducts.length}`
+      );
+      if (categoryProducts.length === 0) {
+        console.warn(
+          `[Category Page] No products found for category: ${categoryParam}`
+        );
+      }
+    }
 
-  // Generate metadata for SEO
-  const metadata = {
-    title:
-      displayCategory.metaTitle ||
-      `${displayCategory.name} Products - GroceryFresh`,
-    description:
-      displayCategory.metaDescription ||
-      `Browse our selection of ${displayCategory.name.toLowerCase()} products. Fresh, organic, and delivered to your door.`,
-  };
+    // Find the category
+    const category =
+      categories.find(
+        (cat) =>
+          cat.id === categoryParam ||
+          cat.slug?.toLowerCase() === categoryParam.toLowerCase() ||
+          cat.name?.toLowerCase().replace(/\s+/g, "-") ===
+            categoryParam.toLowerCase()
+      ) || null;
 
-  return (
-    <CategoryPageClient
-      category={displayCategory}
-      categoryProducts={safeCategoryProducts}
-      metadata={metadata}
-    />
-  );
+    // If category not found, create a temporary category object to still show the page
+    // This handles cases where the category exists in backend but slug doesn't match exactly
+    const displayCategory = category || {
+      id: categoryParam,
+      name: categoryParam
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" "),
+      slug: categoryParam,
+      icon: "Package",
+      productCount: categoryProducts.length,
+    };
+
+    // Generate metadata for SEO
+    const metadata = {
+      title:
+        displayCategory.metaTitle ||
+        `${displayCategory.name} Products - GroceryFresh`,
+      description:
+        displayCategory.metaDescription ||
+        `Browse our selection of ${displayCategory.name.toLowerCase()} products. Fresh, organic, and delivered to your door.`,
+    };
+
+    return (
+      <CategoryPageClient
+        category={displayCategory}
+        categoryProducts={categoryProducts}
+        metadata={metadata}
+      />
+    );
+  } catch (error) {
+    const fetchError =
+      error instanceof Error ? error : new Error(String(error));
+    console.error(
+      `[Category Page] Error fetching products for category ${categoryParam}:`,
+      fetchError
+    );
+
+    // Still try to fetch categories to show something
+    const categories = await fetchCategoriesSSR().catch(() => []);
+
+    const category =
+      categories.find(
+        (cat) =>
+          cat.id === categoryParam ||
+          cat.slug?.toLowerCase() === categoryParam.toLowerCase() ||
+          cat.name?.toLowerCase().replace(/\s+/g, "-") ===
+            categoryParam.toLowerCase()
+      ) || null;
+
+    const displayCategory = category || {
+      id: categoryParam,
+      name: categoryParam
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" "),
+      slug: categoryParam,
+      icon: "Package",
+      productCount: 0,
+    };
+
+    const metadata = {
+      title:
+        displayCategory.metaTitle ||
+        `${displayCategory.name} Products - GroceryFresh`,
+      description:
+        displayCategory.metaDescription ||
+        `Browse our selection of ${displayCategory.name.toLowerCase()} products. Fresh, organic, and delivered to your door.`,
+    };
+
+    return (
+      <CategoryPageClient
+        category={displayCategory}
+        categoryProducts={categoryProducts}
+        metadata={metadata}
+      />
+    );
+  }
 }

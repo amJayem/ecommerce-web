@@ -52,20 +52,69 @@ export async function getProductsByCategory(
   try {
     // Try to determine if it's an ID (numeric) or slug (string)
     const isNumeric = /^\d+$/.test(categoryParam);
+    // URL encode the category param to handle special characters
+    const encodedParam = encodeURIComponent(categoryParam);
     const endpoint = isNumeric
-      ? `/products?categoryId=${categoryParam}`
-      : `/products?categorySlug=${categoryParam}`;
+      ? `/products?categoryId=${encodedParam}`
+      : `/products?categorySlug=${encodedParam}`;
 
     const response = await api.get(endpoint);
-    // Handle different response formats - your API returns { products: [...], pagination: {...} }
-    const data =
-      response.data?.products || response.data?.data || response.data || [];
-    return Array.isArray(data) ? data : [];
+
+    // Handle different response formats - your API might return:
+    // - { products: [...], pagination: {...} }
+    // - { data: [...] }
+    // - [...] (direct array)
+    let data = response.data?.products || response.data?.data || response.data;
+
+    // If data is not an array, try to extract from nested structure
+    if (!Array.isArray(data) && data) {
+      // Try common nested structures
+      if (data.items && Array.isArray(data.items)) {
+        data = data.items;
+      } else if (data.results && Array.isArray(data.results)) {
+        data = data.results;
+      } else {
+        // Log for debugging in production
+        if (process.env.NODE_ENV === "production") {
+          console.warn(
+            `[getProductsByCategory] Unexpected response format for category ${categoryParam}:`,
+            {
+              type: typeof data,
+              keys: data && typeof data === "object" ? Object.keys(data) : null,
+              firstLevel:
+                typeof data === "object" && data !== null
+                  ? JSON.stringify(data).substring(0, 200)
+                  : data,
+            }
+          );
+        }
+        data = [];
+      }
+    }
+
+    const products = Array.isArray(data) ? data : [];
+
+    // Log for debugging in production
+    if (process.env.NODE_ENV === "production") {
+      console.log(
+        `[getProductsByCategory] Category: ${categoryParam}, Products found: ${products.length}`
+      );
+    }
+
+    return products;
   } catch (error) {
     console.error(
       `Error fetching products for category ${categoryParam}:`,
       error
     );
+    // In production, log more details
+    if (process.env.NODE_ENV === "production" && error instanceof Error) {
+      console.error(`[getProductsByCategory] Error details:`, {
+        message: error.message,
+        categoryParam,
+        stack: error.stack,
+      });
+    }
     throw new Error(`Failed to fetch products for category ${categoryParam}`);
   }
 }
