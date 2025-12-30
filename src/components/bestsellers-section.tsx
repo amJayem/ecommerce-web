@@ -58,7 +58,8 @@ export function BestsellersSection({
                   <div className="px-4 cursor-pointer">
                     <div className="mb-2">
                       <span className="text-xs text-green-600 font-medium bg-green-50 px-2 py-1 rounded-full">
-                        {typeof product.category === "object"
+                        {product.category &&
+                        typeof product.category === "object"
                           ? product.category.name
                           : product.category}
                       </span>

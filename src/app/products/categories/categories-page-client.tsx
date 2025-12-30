@@ -56,7 +56,7 @@ export default function CategoriesPageClient({
           {categoriesWithCounts.map((category) => {
             const categoryProducts = allProducts.filter((p) => {
               // Handle both string and object category formats
-              if (typeof p.category === "object") {
+              if (p.category && typeof p.category === "object") {
                 return (
                   p.category.id === parseInt(category.id) ||
                   p.category.name === category.name

@@ -57,13 +57,13 @@ ProductPageClientProps) {
           <span>/</span>
           <Link
             href={`/products/categories/${
-              typeof product.category === "object"
+              product.category && typeof product.category === "object"
                 ? product.category.slug
                 : product.categoryId
             }`}
             className="hover:text-green-600"
           >
-            {typeof product.category === "object"
+            {product.category && typeof product.category === "object"
               ? product.category.name
               : product.categoryId}
           </Link>
@@ -161,7 +161,7 @@ ProductPageClientProps) {
               <Package className="w-4 h-4 text-gray-500" />
               <span className="text-gray-600">Category:</span>
               <span className="font-medium">
-                {typeof product.category === "object"
+                {product.category && typeof product.category === "object"
                   ? product.category.name
                   : product.categoryId}
               </span>

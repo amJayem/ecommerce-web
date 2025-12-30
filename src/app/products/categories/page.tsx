@@ -28,7 +28,7 @@ export default async function CategoriesPage() {
   const categoriesWithCounts = categories.map((category) => {
     const matchingProducts = allProducts.filter((p) => {
       // Handle both string and object category formats
-      if (typeof p.category === "object") {
+      if (p.category && typeof p.category === "object") {
         return (
           p.category.id === parseInt(category.id) ||
           p.category.name === category.name

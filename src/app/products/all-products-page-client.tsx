@@ -207,13 +207,14 @@ export default function AllProductsPageClient({
                     <Link href={`/products/${product.id}`}>
                       <div className="cursor-pointer mb-4">
                         {/* Category Badge */}
-                        {typeof product.category === "object" && (
-                          <div className="mb-2">
-                            <span className="text-xs text-green-600 font-medium bg-green-50 px-2 py-1 rounded-full">
-                              {product.category.name}
-                            </span>
-                          </div>
-                        )}
+                        {product.category &&
+                          typeof product.category === "object" && (
+                            <div className="mb-2">
+                              <span className="text-xs text-green-600 font-medium bg-green-50 px-2 py-1 rounded-full">
+                                {product.category.name}
+                              </span>
+                            </div>
+                          )}
 
                         <h3 className="font-semibold text-lg text-gray-800 mb-2 line-clamp-2 hover:text-green-600 transition-colors">
                           {product.name}
