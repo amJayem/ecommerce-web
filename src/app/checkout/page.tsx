@@ -108,10 +108,10 @@ export default function CheckoutPage() {
         totalAmount,
       };
       // Call backend API to place order
-      await submitOrder(orderPayload);
+      const result = await submitOrder(orderPayload);
       toast.success("Order placed successfully!");
       dispatch(clearCart());
-      router.push("/order-confirmation");
+      router.push(`/order-confirmation?orderId=${result.id}`);
     } catch {
       toast.error("Failed to place order. Please try again.");
     } finally {
