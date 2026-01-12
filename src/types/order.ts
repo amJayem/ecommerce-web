@@ -55,3 +55,31 @@ export interface OrderItem {
   quantity: number;
   price: number;
 }
+
+// Response after placing an order
+export interface OrderPlacementResponse {
+  order: Order;
+  confirmationToken: string;
+}
+
+// Response for Thank You page summary
+export interface ThankYouItem {
+  productName: string;
+  coverImage: string;
+  quantity: number;
+  price: number;
+  total: number;
+}
+
+export interface ThankYouSummary {
+  orderNumber: number;
+  status: string;
+  totalAmount: number;
+  subtotal: number;
+  tax: number;
+  shippingCost: number;
+  discount: number;
+  shippingAddressText: string;
+  items: ThankYouItem[];
+  createdAt: string;
+}
