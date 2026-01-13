@@ -14,6 +14,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { getSafeImageSrc } from "@/lib/utils";
+import { Container } from "@/components/ui/container";
 
 export default function CartPage() {
   const { items } = useSelector((state: RootState) => state.cart);
@@ -26,7 +27,7 @@ export default function CartPage() {
   );
 
   return (
-    <div className="max-w-7xl mx-auto py-10 px-4">
+    <Container className="py-10">
       {/* Header */}
       <div className="mb-8">
         <Link
@@ -43,7 +44,7 @@ export default function CartPage() {
         </p>
       </div>
       {items.length === 0 ? (
-        <div className="max-w-4xl mx-auto py-12 px-4 text-center bg-gray-50 rounded-xl border">
+        <div className="max-w-4xl mx-auto py-12 px-4 text-center bg-gray-50 rounded-xl border shadow-card">
           <ShoppingCart className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-gray-800 mb-2">
             Your cart is empty
@@ -64,7 +65,7 @@ export default function CartPage() {
             {items.map((item) => (
               <div
                 key={item.id}
-                className="bg-white border rounded-xl p-4 flex items-center gap-4"
+                className="bg-white border rounded-xl p-4 flex items-center gap-4 shadow-card hover:shadow-card-hover transition-shadow"
               >
                 {/* Product Image */}
                 <div className="w-20 h-20 relative flex-shrink-0">
@@ -142,7 +143,7 @@ export default function CartPage() {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white border rounded-xl p-6 sticky top-4">
+            <div className="bg-white border rounded-xl p-6 sticky top-4 shadow-card">
               <h2 className="text-xl font-bold text-gray-800 mb-4">
                 Order Summary
               </h2>
@@ -166,7 +167,7 @@ export default function CartPage() {
 
               <Button
                 onClick={() => router.push("/checkout")}
-                className="w-full bg-green-600 hover:bg-green-700 text-white py-3 text-lg font-semibold rounded-lg"
+                className="w-full bg-green-600 hover:bg-green-700 text-white py-3 text-lg font-semibold rounded-lg shadow-md hover:shadow-lg transition-all"
               >
                 Proceed to Checkout
               </Button>
@@ -182,6 +183,6 @@ export default function CartPage() {
           </div>
         </div>
       )}
-    </div>
+    </Container>
   );
 }

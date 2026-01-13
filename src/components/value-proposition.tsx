@@ -1,6 +1,7 @@
 // components/value-proposition.tsx
 
 import { Shield, Truck, DollarSign, Leaf } from "lucide-react";
+import { Container } from "@/components/ui/container";
 
 export function ValueProposition() {
   const trustBadges = [
@@ -28,9 +29,9 @@ export function ValueProposition() {
 
   return (
     <section className="w-full py-16 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4">
+      <Container>
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">
+          <h2 className="text-3xl font-semibold text-gray-800 mb-4">
             Why Choose GroceryFresh?
           </h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
@@ -54,7 +55,7 @@ export function ValueProposition() {
             </div>
           ))}
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

@@ -11,6 +11,7 @@ import {
   fetchBestsellerProductsSSR,
 } from "@/lib/api";
 import { Button } from "@/components/ui/button";
+import { Container } from "@/components/ui/container";
 import Link from "next/link";
 
 // Avoid build-time API calls; always render dynamically
@@ -58,9 +59,9 @@ export default async function HomePage() {
 
       {/* Store Products Section - First 30 products */}
       <section className="w-full py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
+        <Container>
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
+            <h2 className="text-3xl font-semibold text-gray-800 mb-4">
               All Products
             </h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
@@ -98,15 +99,15 @@ export default async function HomePage() {
               </Link>
             </div>
           )}
-        </div>
+        </Container>
       </section>
 
       {/* Featured Products Section */}
       {displayFeaturedProducts.length > 0 && (
         <section className="w-full py-16 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4">
+          <Container>
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-800 mb-4">
+              <h2 className="text-3xl font-semibold text-gray-800 mb-4">
                 Featured Products
               </h2>
               <p className="text-gray-600 text-lg max-w-2xl mx-auto">
@@ -130,16 +131,12 @@ export default async function HomePage() {
                 stock: product.stock,
               }))}
             />
-          </div>
+          </Container>
         </section>
       )}
 
       {/* Why Choose GroceryFresh Section */}
-      <section className="w-full py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <ValueProposition />
-        </div>
-      </section>
+      <ValueProposition />
       {safeBestsellerProducts?.length > 0 && (
         <BestsellersSection bestsellerProducts={safeBestsellerProducts} />
       )}

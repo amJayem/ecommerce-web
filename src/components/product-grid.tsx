@@ -36,7 +36,7 @@ export default function ProductGrid({ products }: ProductGridProps) {
         return (
           <div
             key={product?.id}
-            className="border rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300 bg-white"
+            className="border rounded-xl p-4 shadow-card hover:shadow-card-hover transition-all duration-300 bg-white"
           >
             {/* Product Image */}
             <Link href={`/products/${product?.id}`}>

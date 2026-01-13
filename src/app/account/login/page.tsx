@@ -57,9 +57,9 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-white flex flex-col justify-center py-10 lg:py-20 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-5xl">
-        <div className="bg-white rounded-3xl overflow-hidden shadow-2xl border border-gray-100 flex flex-col lg:flex-row">
+        <div className="bg-white rounded-3xl overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.08)] border border-gray-100 flex flex-col lg:flex-row">
           {/* Left Side: Trust & Benefits */}
-          <div className="bg-green-600 p-10 lg:p-12 lg:w-5/12 flex flex-col justify-between text-white relative overflow-hidden">
+          <div className="bg-green-600 p-10 lg:p-12 lg:w-5/12 flex flex-col justify-between text-white relative overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.12)]">
             {/* Background Pattern */}
             <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
               <div className="absolute top-[-50px] right-[-50px] w-48 h-48 bg-white rounded-full blur-3xl"></div>
@@ -79,8 +79,8 @@ export default function LoginPage() {
                     <Truck className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-lg">Fast Delivery</h4>
-                    <p className="text-green-100 text-sm mt-1">
+                    <h4 className="font-semibold text-lg">Fast Delivery</h4>
+                    <p className="text-green-100 text-sm mt-1 font-normal">
                       Get your groceries delivered in as fast as 1 hour.
                     </p>
                   </div>
@@ -91,8 +91,8 @@ export default function LoginPage() {
                     <ShieldCheck className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-lg">Secure & Safe</h4>
-                    <p className="text-green-100 text-sm mt-1">
+                    <h4 className="font-semibold text-lg">Secure & Safe</h4>
+                    <p className="text-green-100 text-sm mt-1 font-normal">
                       Your data and payments are protected with bank-level
                       security.
                     </p>
@@ -104,8 +104,10 @@ export default function LoginPage() {
                     <CheckCircle2 className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-lg">Freshness Guaranteed</h4>
-                    <p className="text-green-100 text-sm mt-1">
+                    <h4 className="font-semibold text-lg">
+                      Freshness Guaranteed
+                    </h4>
+                    <p className="text-green-100 text-sm mt-1 font-normal">
                       If it's not fresh, we'll replace it for free. No questions
                       asked.
                     </p>
@@ -115,17 +117,15 @@ export default function LoginPage() {
             </div>
 
             <div className="mt-12 relative z-10 text-sm text-green-100 opacity-70">
-              © 2024 GroceryFresh Inc.
+              © {new Date().getFullYear()} GroceryFresh Inc.
             </div>
           </div>
 
           {/* Right Side: Login Form */}
           <div className="p-8 lg:p-12 lg:w-7/12 bg-white flex flex-col justify-center">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
-              <h2 className="text-3xl font-extrabold text-gray-900 mb-2">
-                Sign In
-              </h2>
-              <p className="text-sm text-gray-500 mb-8">
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">Sign In</h2>
+              <p className="text-sm text-gray-500 mb-8 font-normal">
                 Enter your details to access your account.
               </p>
             </div>
@@ -137,10 +137,12 @@ export default function LoginPage() {
                   <div className="rounded-xl bg-red-50 p-4 border border-red-100 flex items-start animate-in fade-in slide-in-from-top-1">
                     <AlertCircle className="h-5 w-5 text-red-500 mt-0.5 mr-3 flex-shrink-0" />
                     <div>
-                      <h4 className="text-sm font-bold text-red-800">
+                      <h4 className="text-sm font-semibold text-red-800">
                         Login Failed
                       </h4>
-                      <p className="text-sm text-red-600 mt-1">{error}</p>
+                      <p className="text-sm text-red-600 mt-1 font-normal">
+                        {error}
+                      </p>
                     </div>
                   </div>
                 )}
@@ -148,7 +150,7 @@ export default function LoginPage() {
                 <div>
                   <label
                     htmlFor="email"
-                    className="block text-sm font-bold text-gray-700 mb-1.5 ml-1"
+                    className="block text-sm font-medium text-gray-700 mb-1.5 ml-1"
                   >
                     Email Address
                   </label>
@@ -163,7 +165,7 @@ export default function LoginPage() {
                       autoComplete="email"
                       required
                       placeholder="name@example.com"
-                      className="pl-11 h-12 block w-full rounded-xl border-gray-200 focus:border-green-500 focus:ring-green-500 sm:text-sm bg-gray-50/50 hover:bg-white transition-all shadow-sm"
+                      className="pl-11 h-12 block w-full rounded-xl border-gray-200 focus:border-green-500 focus:ring-green-500 sm:text-sm bg-gray-50/50 hover:bg-white transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.05)] font-normal placeholder:font-normal"
                       value={formData.email}
                       onChange={handleChange}
                       aria-invalid={!!error}
@@ -175,13 +177,13 @@ export default function LoginPage() {
                   <div className="flex justify-between items-center mb-1.5 ml-1">
                     <label
                       htmlFor="password"
-                      className="block text-sm font-bold text-gray-700"
+                      className="block text-sm font-medium text-gray-700"
                     >
                       Password
                     </label>
                     <a
                       href="#"
-                      className="text-xs font-bold text-green-600 hover:text-green-500"
+                      className="text-xs font-semibold text-green-600 hover:text-green-500"
                     >
                       Forgot password?
                     </a>
@@ -197,7 +199,7 @@ export default function LoginPage() {
                       autoComplete="current-password"
                       required
                       placeholder="••••••••"
-                      className="pl-11 pr-10 h-12 block w-full rounded-xl border-gray-200 focus:border-green-500 focus:ring-green-500 sm:text-sm bg-gray-50/50 hover:bg-white transition-all shadow-sm"
+                      className="pl-11 pr-10 h-12 block w-full rounded-xl border-gray-200 focus:border-green-500 focus:ring-green-500 sm:text-sm bg-gray-50/50 hover:bg-white transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.05)] font-normal placeholder:font-normal"
                       value={formData.password}
                       onChange={handleChange}
                       aria-invalid={!!error}
@@ -240,7 +242,7 @@ export default function LoginPage() {
                   <Button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full h-12 flex justify-center py-2 px-4 border border-transparent rounded-xl shadow-lg shadow-green-200 text-sm font-bold text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all hover:scale-[1.01] active:scale-[0.99]"
+                    className="w-full h-12 flex justify-center py-2 px-4 border border-transparent rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.08)] text-sm font-semibold text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all hover:scale-[1.01] active:scale-[0.99]"
                     aria-label={isLoading ? "Signing in..." : "Sign In"}
                   >
                     {isLoading ? (
@@ -273,7 +275,7 @@ export default function LoginPage() {
                   <Link href="/account/register" className="w-full block">
                     <Button
                       variant="outline"
-                      className="w-full h-12 rounded-xl border-2 border-green-50 text-green-700 font-bold hover:bg-green-50 hover:border-green-100 hover:text-green-800 transition-all"
+                      className="w-full h-12 rounded-xl border-2 border-green-50 text-green-700 font-semibold hover:bg-green-50 hover:border-green-100 hover:text-green-800 transition-all"
                     >
                       Create an Account
                     </Button>

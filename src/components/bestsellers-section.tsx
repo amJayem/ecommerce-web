@@ -22,7 +22,7 @@ export function BestsellersSection({
     <section className="w-full py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">
+          <h2 className="text-3xl font-semibold text-gray-800 mb-4">
             Our Bestsellers
           </h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
@@ -39,7 +39,7 @@ export function BestsellersSection({
             return (
               <div
                 key={product.id}
-                className="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group"
+                className="bg-white border rounded-xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 group"
               >
                 {/* Product Image - Clickable for details */}
                 <Link href={`/products/${product.id}`}>

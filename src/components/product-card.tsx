@@ -15,7 +15,7 @@ interface Product {
 
 export function ProductCard({ product }: { product: Product }) {
   return (
-    <div className="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 p-4 relative group">
+    <div className="bg-white border rounded-xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 p-4 relative group">
       {product?.discount && (
         <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded z-10">
           {product?.discount}% OFF

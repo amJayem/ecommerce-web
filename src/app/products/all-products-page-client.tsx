@@ -4,6 +4,7 @@ import { ProductSearchFilters } from "@/components/product-search-filters";
 import { ProductGridSkeleton } from "@/components/product-skeleton";
 import { QuantityUpdater } from "@/components/quantity-updater";
 import { Button } from "@/components/ui/button";
+import { Container } from "@/components/ui/container";
 import { SearchFilters, useProductSearch } from "@/hooks/useProductSearch";
 import { Category } from "@/lib/api";
 import { getSafeImageSrc } from "@/lib/utils";
@@ -126,7 +127,7 @@ export default function AllProductsPageClient({
     <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-green-600 to-green-700 text-white py-8 md:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+        <Container className="text-center">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6">
             All Products
           </h1>
@@ -134,11 +135,11 @@ export default function AllProductsPageClient({
             Browse our complete collection of fresh, organic products. Find
             everything you need for your healthy lifestyle.
           </p>
-        </div>
+        </Container>
       </div>
 
       {/* Page Content */}
-      <div className="max-w-7xl mx-auto py-6 md:py-8 px-4 sm:px-6">
+      <Container className="py-6 md:py-8">
         {/* Search and Filters */}
         <ProductSearchFilters
           searchQuery={searchQuery}
@@ -301,7 +302,7 @@ export default function AllProductsPageClient({
             </Button>
           </div>
         )}
-      </div>
+      </Container>
     </div>
   );
 }
