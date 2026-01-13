@@ -291,9 +291,11 @@ function ThankYouContent() {
                     manage addresses, and earn points on every order.
                   </p>
                 </div>
-                <Button className="bg-white text-green-700 hover:bg-green-50 h-12 px-8 rounded-xl font-bold border-none transition-all shadow-md group-hover:px-10">
-                  Sign Up Effortlessly
-                </Button>
+                <Link href="/account/register">
+                  <Button className="bg-white text-green-700 hover:bg-green-50 h-12 px-8 rounded-xl font-bold border-none transition-all shadow-md group-hover:px-10">
+                    Sign Up Effortlessly
+                  </Button>
+                </Link>
               </div>
               <ShoppingBag className="absolute -right-8 -bottom-8 w-64 h-64 text-white opacity-10 rotate-12 group-hover:rotate-0 transition-transform duration-1000" />
             </div>
