@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const response = await apiLogin(credentials);
       setUser(response.user);
       toast.success("Welcome back!");
-      router.push("/account"); // Redirect to account dashboard or previous page
+      router.push("/"); // Redirect to home page
     } catch (error: unknown) {
       console.error("Login failed:", error);
       const axiosError = error as AxiosError<{ message: string }>;
