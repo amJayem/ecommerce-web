@@ -203,7 +203,7 @@ export default function AccountLayout({
           </aside>
 
           {/* Main Content */}
-          <main className="flex-1 w-full min-w-0">{children}</main>
+          <main className="flex-1 w-full min-w-0 min-h-[70vh]">{children}</main>
         </div>
       </Container>
     </div>
