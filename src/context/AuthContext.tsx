@@ -28,29 +28,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  // Hydrate auth state on mount
+  const hydrateAuth = async () => {
+    try {
+      const user = await getMe();
+      setUser(user);
+    } catch (error) {
+      // If hydration fails with 401, just set user to null.
+      // The Axios interceptor will handle the actual refresh/redirect.
+      setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Hydrate auth state on mount and listen for background refreshes
   useEffect(() => {
-    const hydrateAuth = async () => {
-      try {
-        const user = await getMe();
-        setUser(user);
-      } catch (error) {
-        // If hydration fails with 401, clear the invalid cookie to fix middleware loops
-        const axiosError = error as AxiosError;
-        if (axiosError.response?.status === 401) {
-          try {
-            await apiLogout();
-          } catch (e) {
-            console.error("Failed to clear cookie on hydration error", e);
-          }
-        }
-        setUser(null);
-      } finally {
-        setIsLoading(false);
-      }
+    hydrateAuth();
+
+    // Listen for background token refreshes to sync UI state
+    const handleRefresh = () => {
+      console.log("Session refreshed event received, re-hydrating user...");
+      hydrateAuth();
     };
 
-    hydrateAuth();
+    window.addEventListener("session-refreshed", handleRefresh);
+    return () => window.removeEventListener("session-refreshed", handleRefresh);
   }, []);
 
   const login = async (credentials: LoginCredentials) => {
@@ -76,7 +78,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const response = await apiRegister(credentials);
       setUser(response.user);
       toast.success("Account created successfully!");
-      router.push("/account");
+      router.push("/account/profile");
     } catch (error: unknown) {
       console.error("Registration failed:", error);
       const axiosError = error as AxiosError<{ message: string }>;

@@ -71,6 +71,11 @@ api.interceptors.response.use(
         // Attempt to refresh token
         await api.post("/auth/refresh");
 
+        // Notify app that session was refreshed (for AuthContext UI sync)
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent("session-refreshed"));
+        }
+
         // If successful, process queue and retry original
         processQueue(null);
         return api(originalRequest);
@@ -78,9 +83,14 @@ api.interceptors.response.use(
         // If refresh fails, process queue with error
         processQueue(refreshErr as Error, null);
 
-        // Ideally, we would redirect to login here, but we should let the
-        // AuthContext or the component handle the final redirect based on the error.
-        // However, for a rigid security flow, we might want to force a logout or cleanup.
+        // BREAK THE LOOP: Only redirect if we AREN'T already on the login page.
+        if (
+          typeof window !== "undefined" &&
+          window.location.pathname !== "/account/login"
+        ) {
+          window.location.href = "/account/login";
+        }
+
         return Promise.reject(refreshErr);
       } finally {
         isRefreshing = false;

@@ -8,6 +8,8 @@ export function middleware(request: NextRequest) {
     request.cookies.get("token")?.value ||
     request.cookies.get("access_token")?.value;
 
+  const refreshToken = request.cookies.get("refresh_token")?.value;
+
   const { pathname } = request.nextUrl;
 
   // auth/login and auth/register are in account folder now, so we need to be careful.
@@ -22,14 +24,14 @@ export function middleware(request: NextRequest) {
 
   const isProtectedRoute = isProtectedAccountRoute || isCheckoutRoute;
 
-  if (isProtectedRoute && !token) {
+  if (isProtectedRoute && !token && !refreshToken) {
     const loginUrl = new URL("/account/login", request.url);
     loginUrl.searchParams.set("from", pathname); // Save original destination
     return NextResponse.redirect(loginUrl);
   }
 
   if (isAuthRoute && token) {
-    return NextResponse.redirect(new URL("/account", request.url));
+    return NextResponse.redirect(new URL("/account/profile", request.url));
   }
 
   return NextResponse.next();
