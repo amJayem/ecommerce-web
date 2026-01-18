@@ -8,6 +8,7 @@ import {
   logout as apiLogout,
   getMe,
 } from "@/lib/api/auth";
+import { getProfile } from "@/lib/api/user";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { AxiosError } from "axios";
@@ -30,12 +31,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const hydrateAuth = async () => {
     try {
-      const user = await getMe();
+      const user = await getProfile();
       setUser(user);
-    } catch (error) {
+    } catch (error: any) {
       // If hydration fails with 401, just set user to null.
       // The Axios interceptor will handle the actual refresh/redirect.
       setUser(null);
+      if (error.response?.status >= 500) {
+        toast.error("Cloud server error. Some features may be unavailable.");
+      }
     } finally {
       setIsLoading(false);
     }

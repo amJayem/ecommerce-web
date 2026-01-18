@@ -3,6 +3,38 @@ export interface User {
   name: string;
   email: string;
   role: "user" | "admin";
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  avatarUrl?: string;
+  memberSince?: string;
+  stats?: {
+    totalOrders: number;
+    activeOrders: number;
+  };
+}
+
+export interface UserAddress {
+  id: number;
+  firstName: string;
+  lastName: string;
+  street: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+  phone: string;
+  addressName?: string;
+  addressType: "Home" | "Office" | "Other" | "saved" | "order_snapshot";
+  isDefault: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface NotificationPreferences {
+  orderUpdates: boolean;
+  newsletters: boolean;
+  stockAlerts: boolean;
 }
 
 export interface LoginCredentials {
