@@ -20,11 +20,8 @@ export function middleware(request: NextRequest) {
   // Protected routes: everything in /account EXCEPT login and register
   const isProtectedAccountRoute =
     pathname.startsWith("/account") && !isAuthRoute;
-  const isCheckoutRoute = pathname.startsWith("/checkout");
 
-  const isProtectedRoute = isProtectedAccountRoute || isCheckoutRoute;
-
-  if (isProtectedRoute && !token && !refreshToken) {
+  if (isProtectedAccountRoute && !token && !refreshToken) {
     const loginUrl = new URL("/account/login", request.url);
     loginUrl.searchParams.set("from", pathname); // Save original destination
     return NextResponse.redirect(loginUrl);
@@ -38,5 +35,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/account/:path*", "/checkout"],
+  matcher: ["/account/:path*"],
 };

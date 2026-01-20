@@ -20,3 +20,20 @@ export const getThankYouSummary = (orderNumber: string, token: string) =>
   get<ThankYouSummary>(
     `/orders/thank-you?orderNumber=${orderNumber}&token=${token}`
   );
+
+// Fetch user's orders (Authenticated)
+export const getUserOrders = (params?: {
+  status?: string;
+  page?: number;
+  limit?: number;
+}) => {
+  const queryParams = new URLSearchParams();
+  if (params?.status) queryParams.append("status", params.status);
+  if (params?.page) queryParams.append("page", params.page.toString());
+  if (params?.limit) queryParams.append("limit", params.limit.toString());
+
+  const queryString = queryParams.toString();
+  return get<{ orders: Order[]; pagination: any }>(
+    `/orders/my-orders${queryString ? `?${queryString}` : ""}`
+  );
+};

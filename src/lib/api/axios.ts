@@ -82,15 +82,6 @@ api.interceptors.response.use(
       } catch (refreshErr) {
         // If refresh fails, process queue with error
         processQueue(refreshErr as Error, null);
-
-        // BREAK THE LOOP: Only redirect if we AREN'T already on the login page.
-        if (
-          typeof window !== "undefined" &&
-          window.location.pathname !== "/account/login"
-        ) {
-          window.location.href = "/account/login";
-        }
-
         return Promise.reject(refreshErr);
       } finally {
         isRefreshing = false;

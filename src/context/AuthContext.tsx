@@ -34,9 +34,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const user = await getProfile();
       setUser(user);
     } catch (error: any) {
-      // If hydration fails with 401, just set user to null.
-      // The Axios interceptor will handle the actual refresh/redirect.
       setUser(null);
+
+      // Handle restricted access redirection
+      if (typeof window !== "undefined" && error.response?.status === 401) {
+        const pathname = window.location.pathname;
+
+        // Same logic as middleware for consistency
+        const authRoutes = ["/account/login", "/account/register"];
+        const isAuthRoute = authRoutes.some((route) =>
+          pathname.startsWith(route)
+        );
+        const isProtectedAccountRoute =
+          pathname.startsWith("/account") && !isAuthRoute;
+        const isCheckoutRoute = pathname.startsWith("/checkout");
+
+        if (isProtectedAccountRoute || isCheckoutRoute) {
+          const loginUrl = new URL("/account/login", window.location.origin);
+          loginUrl.searchParams.set("from", pathname);
+          window.location.href = loginUrl.toString();
+        }
+      }
+
       if (error.response?.status >= 500) {
         toast.error("Cloud server error. Some features may be unavailable.");
       }
