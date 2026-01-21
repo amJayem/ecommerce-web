@@ -9,12 +9,19 @@ import { Menu, ShoppingCart, User } from "lucide-react";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { SearchBar } from "./search-bar";
+import { useState, useEffect } from "react";
 
 export function Navbar() {
   const dispatch = useDispatch();
   const itemCount = useSelector((state: RootState) =>
     state.cart.items.reduce((sum, item) => sum + item.quantity, 0)
   );
+  const [mounted, setMounted] = useState(false);
+
+  // Prevent hydration mismatch by only showing cart count after mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const mainCategories = [
     { name: "Fruits", href: "/products/categories/fruits" },
@@ -63,15 +70,17 @@ export function Navbar() {
               className="relative"
               onClick={() => dispatch(toggleCart())}
             >
-              <ShoppingCart className="h-5 w-5" />
-              {itemCount > 0 && (
-                <span
-                  className="absolute -top-1 -right-1 bg-red-500 text-white 
-                text-xs rounded-full w-5 h-5 flex items-center justify-center"
-                >
-                  {itemCount}
-                </span>
-              )}
+              <>
+                <ShoppingCart className="h-5 w-5" />
+                {mounted && itemCount > 0 && (
+                  <span
+                    className="absolute -top-1 -right-1 bg-red-500 text-white 
+                  text-xs rounded-full w-5 h-5 flex items-center justify-center"
+                  >
+                    {itemCount}
+                  </span>
+                )}
+              </>
             </Button>
             {/* Mobile menu */}
             <Button variant="ghost" size="icon" className="md:hidden">

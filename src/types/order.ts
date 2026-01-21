@@ -41,11 +41,26 @@ export interface CreateOrder {
 export interface Order {
   id: number;
   userId?: number | null;
+  guestEmail?: string | null;
   status: string;
-  total: number;
+  totalAmount: number;
+  subtotal: number;
+  tax: number;
+  shippingCost: number;
+  discount: number;
+  paymentStatus: string;
+  paymentMethod: string;
+  shippingAddressId?: number | null;
+  billingAddressId?: number | null;
+  shippingAddressText?: string | null;
+  deliveryNote?: string | null;
+  estimatedDelivery?: string | null;
+  actualDelivery?: string | null;
   createdAt: string;
   updatedAt: string;
   items: OrderItem[];
+  shippingAddress?: any;
+  billingAddress?: any;
 }
 
 export interface OrderItem {
@@ -54,6 +69,13 @@ export interface OrderItem {
   productId: number;
   quantity: number;
   price: number;
+  total: number;
+  product?: {
+    id: number;
+    name: string;
+    slug: string;
+    coverImage: string;
+  };
 }
 
 // Response after placing an order

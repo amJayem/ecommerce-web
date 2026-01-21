@@ -1,18 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getUserOrders } from "@/lib/api/order";
-import { Order } from "@/types/order";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import {
-  PackageOpen,
-  Loader2,
-  Package,
-  Calendar,
-  DollarSign,
-} from "lucide-react";
+import { getUserOrders } from "@/lib/api/order";
 import { cn } from "@/lib/utils";
+import { Order } from "@/types/order";
+import { Calendar, Loader2, Package, PackageOpen } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const STATUS_COLORS = {
   PENDING: "bg-yellow-100 text-yellow-800 border-yellow-200",
@@ -141,9 +135,9 @@ export default function AccountOrdersPage() {
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <DollarSign className="w-4 h-4" />
+                    {/* <DollarSign className="w-4 h-4" /> */}
                     <span className="font-bold text-green-600">
-                      ৳{order.total?.toFixed(2) || "0.00"}
+                      ৳{order.totalAmount?.toFixed(2) || "0.00"}
                     </span>
                   </div>
                 </div>
@@ -151,13 +145,14 @@ export default function AccountOrdersPage() {
 
               {/* Right: Actions */}
               <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  className="rounded-xl font-bold border-2"
-                  asChild
-                >
-                  <Link href={`/account/orders/${order.id}`}>View Details</Link>
-                </Button>
+                <Link href={`/account/orders/${order.id}`}>
+                  <Button
+                    variant="outline"
+                    className="rounded-xl font-bold border-2"
+                  >
+                    View Details
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
