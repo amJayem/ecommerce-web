@@ -48,6 +48,7 @@ export default function CheckoutPage() {
   const [instructions, setInstructions] = useState("");
   const [deliveryDate, setDeliveryDate] = useState<string>("");
   const [paymentMethod, setPaymentMethod] = useState<"COD" | "ONLINE">("COD");
+  const [guestEmail, setGuestEmail] = useState("");
 
   // Phone number handler with validation
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,7 +67,8 @@ export default function CheckoutPage() {
     phone.trim().length > 0 &&
     address1.trim().length > 0 &&
     city.trim().length > 0 &&
-    postalCode.trim().length > 0;
+    postalCode.trim().length > 0 &&
+    (isAuthenticated || guestEmail.trim().length > 0); // Email required for guests
 
   // Show guest modal on mount if user is not authenticated
   useEffect(() => {
@@ -108,6 +110,11 @@ export default function CheckoutPage() {
       // Auto-fill phone from profile
       if (profile.phone) {
         setPhone(profile.phone);
+      }
+
+      // Auto-fill email from profile
+      if (profile.email) {
+        setGuestEmail(profile.email);
       }
 
       // Auto-fill address from default saved address
@@ -286,6 +293,31 @@ export default function CheckoutPage() {
                     {phone && phone.length !== 11 && (
                       <p className="text-xs text-red-500 mt-1">
                         Phone number must be exactly 11 digits
+                      </p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Email{" "}
+                      {!isAuthenticated && (
+                        <span className="text-red-500">*</span>
+                      )}
+                      {isAuthenticated && (
+                        <span className="text-gray-500 text-xs">
+                          (optional)
+                        </span>
+                      )}
+                    </label>
+                    <Input
+                      type="email"
+                      placeholder="your@email.com"
+                      value={guestEmail}
+                      onChange={(e) => setGuestEmail(e.target.value)}
+                      required={!isAuthenticated}
+                    />
+                    {!isAuthenticated && (
+                      <p className="text-xs text-gray-500">
+                        We'll send order confirmation to this email
                       </p>
                     )}
                   </div>
