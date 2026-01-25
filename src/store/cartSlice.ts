@@ -22,7 +22,7 @@ const loadInitialState = (): CartState => {
   if (stored) {
     return {
       items: (stored.items as CartItem[]) || [],
-      isOpen: stored.isOpen || false,
+      isOpen: false, // Always start with cart closed
     };
   }
   return {
@@ -62,6 +62,8 @@ export const cartSlice = createSlice({
         };
         state.items.push({ ...cartItem, quantity: 1 });
       }
+      // Auto-open cart drawer when item is added
+      state.isOpen = true;
     },
     removeFromCart: (state, action: PayloadAction<number>) => {
       state.items = state.items.filter((item) => item.id !== action.payload);
