@@ -15,7 +15,6 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import { getSafeImageSrc } from "@/lib/utils";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
-import { GuestCheckoutModal } from "@/components/GuestCheckoutModal";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect } from "react";
 import { getProfile } from "@/lib/api/user";
@@ -27,7 +26,6 @@ export default function CheckoutPage() {
   const dispatch = useDispatch();
   const { isAuthenticated, isLoading: authLoading } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [showGuestModal, setShowGuestModal] = useState(false);
 
   const subtotal = useMemo(
     () => cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
@@ -69,21 +67,6 @@ export default function CheckoutPage() {
     city.trim().length > 0 &&
     postalCode.trim().length > 0 &&
     (isAuthenticated || guestEmail.trim().length > 0); // Email required for guests
-
-  // Show guest modal on mount if user is not authenticated
-  useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
-      const hasSeenModal = sessionStorage.getItem("guestCheckoutModalSeen");
-      if (!hasSeenModal) {
-        setShowGuestModal(true);
-      }
-    }
-  }, [authLoading, isAuthenticated]);
-
-  const handleCloseGuestModal = () => {
-    setShowGuestModal(false);
-    sessionStorage.setItem("guestCheckoutModalSeen", "true");
-  };
 
   // Auto-fill form for logged-in users
   useEffect(() => {
@@ -204,10 +187,6 @@ export default function CheckoutPage() {
 
   return (
     <>
-      <GuestCheckoutModal
-        open={showGuestModal}
-        onClose={handleCloseGuestModal}
-      />
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-6">

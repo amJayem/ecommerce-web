@@ -1,38 +1,78 @@
 "use client";
 
+import { GuestCheckoutModal } from "@/components/GuestCheckoutModal";
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
   DrawerDescription,
   DrawerFooter,
-  DrawerClose,
+  DrawerHeader,
+  DrawerTitle,
 } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  toggleCart,
-  removeFromCart,
-  increaseQuantity,
-  decreaseQuantity,
-} from "@/store/cartSlice";
-import { RootState } from "@/store";
-import Image from "next/image";
-import Link from "next/link";
+import { Separator } from "@/components/ui/separator";
+import { useAuth } from "@/context/AuthContext";
 import { getSafeImageSrc } from "@/lib/utils";
+import { RootState } from "@/store";
+import {
+  decreaseQuantity,
+  increaseQuantity,
+  removeFromCart,
+  toggleCart,
+} from "@/store/cartSlice";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export function CartDrawer() {
   const dispatch = useDispatch();
   const { isOpen, items } = useSelector((state: RootState) => state.cart);
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+  const [showGuestModal, setShowGuestModal] = useState(false);
   const currency = "৳";
 
   const total = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+
+  const handleProceedToCheckout = () => {
+    if (isAuthenticated) {
+      // Logged-in users go directly to checkout
+      dispatch(toggleCart());
+      router.push("/checkout");
+    } else {
+      // Guest users see the modal first
+      setShowGuestModal(true);
+    }
+  };
+
+  const handleCloseGuestModal = () => {
+    setShowGuestModal(false);
+    dispatch(toggleCart()); // Close cart drawer when modal closes
+  };
+
+  const handleSignIn = () => {
+    setShowGuestModal(false);
+    dispatch(toggleCart());
+    router.push("/account/login?from=/checkout");
+  };
+
+  const handleSignUp = () => {
+    setShowGuestModal(false);
+    dispatch(toggleCart());
+    router.push("/account/register?from=/checkout");
+  };
+
+  const handleContinueAsGuest = () => {
+    setShowGuestModal(false);
+    dispatch(toggleCart());
+    router.push("/checkout");
+  };
 
   return (
     <Drawer open={isOpen} onOpenChange={() => dispatch(toggleCart())}>
@@ -111,22 +151,27 @@ export function CartDrawer() {
               {total.toFixed(2)}
             </span>
           </div>
-          <Link
-            hidden={items.length === 0}
-            href={"/checkout"}
-            onClick={() => {
-              dispatch(toggleCart());
-            }}
+          <Button
+            className="w-full bg-green-600 hover:bg-green-700"
+            disabled={items.length === 0}
+            onClick={handleProceedToCheckout}
           >
-            <Button className="w-full bg-green-600 hover:bg-green-700">
-              Proceed to Checkout
-            </Button>
-          </Link>
+            Proceed to Checkout
+          </Button>
           <DrawerClose asChild>
             <Button variant="outline">Close</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
+
+      {/* Guest Checkout Modal */}
+      <GuestCheckoutModal
+        open={showGuestModal}
+        onClose={handleCloseGuestModal}
+        onSignIn={handleSignIn}
+        onSignUp={handleSignUp}
+        onContinueAsGuest={handleContinueAsGuest}
+      />
     </Drawer>
   );
 }

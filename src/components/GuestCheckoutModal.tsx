@@ -22,21 +22,46 @@ import {
 interface GuestCheckoutModalProps {
   open: boolean;
   onClose: () => void;
+  onSignIn?: () => void;
+  onSignUp?: () => void;
+  onContinueAsGuest?: () => void;
 }
 
-export function GuestCheckoutModal({ open, onClose }: GuestCheckoutModalProps) {
+export function GuestCheckoutModal({
+  open,
+  onClose,
+  onSignIn,
+  onSignUp,
+  onContinueAsGuest,
+}: GuestCheckoutModalProps) {
   const router = useRouter();
 
   const handleSignIn = () => {
-    router.push("/account/login?from=/checkout");
+    // Don't call onClose() - it would toggle cart twice
+    // Just call the parent handler which closes modal and cart
+    if (onSignIn) {
+      onSignIn();
+    } else {
+      router.push("/account/login?from=/checkout");
+    }
   };
 
   const handleSignUp = () => {
-    router.push("/account/register?from=/checkout");
+    // Don't call onClose() - it would toggle cart twice
+    // Just call the parent handler which closes modal and cart
+    if (onSignUp) {
+      onSignUp();
+    } else {
+      router.push("/account/register?from=/checkout");
+    }
   };
 
   const handleContinueAsGuest = () => {
-    onClose();
+    if (onContinueAsGuest) {
+      onContinueAsGuest();
+    } else {
+      onClose();
+    }
   };
 
   const benefits = [
