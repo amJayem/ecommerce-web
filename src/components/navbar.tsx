@@ -10,6 +10,17 @@ import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { SearchBar } from "./search-bar";
 import { useState, useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { logout } from "@/lib/api/auth";
+import { useRouter } from "next/navigation";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { LogOut, UserCircle, LogIn } from "lucide-react";
 
 export function Navbar() {
   const dispatch = useDispatch();
@@ -18,10 +29,23 @@ export function Navbar() {
   );
   const [mounted, setMounted] = useState(false);
 
+  const { isAuthenticated, user } = useAuth();
+  const router = useRouter();
+
   // Prevent hydration mismatch by only showing cart count after mount
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push("/");
+      window.location.reload(); // Refresh to clear auth state
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   const mainCategories = [
     { name: "Fruits", href: "/products/categories/fruits" },
@@ -59,11 +83,41 @@ export function Navbar() {
 
           {/* Right: Profile and Cart Icons */}
           <div className="flex items-center gap-2 flex-shrink-0">
-            <Link href="/account/profile" className="hidden sm:block">
-              <Button variant="ghost" size="icon">
-                <User className="w-5 h-5" />
-              </Button>
-            </Link>
+            {/* Profile Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="hidden sm:flex">
+                  <User className="w-5 h-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                {isAuthenticated ? (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link href="/account/profile" className="cursor-pointer">
+                        <UserCircle className="w-4 h-4 mr-2" />
+                        Profile
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={handleLogout}
+                      className="cursor-pointer text-red-600"
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Logout
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <DropdownMenuItem asChild>
+                    <Link href="/account/login" className="cursor-pointer">
+                      <LogIn className="w-4 h-4 mr-2" />
+                      Login
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Button
               variant="ghost"
               size="icon"

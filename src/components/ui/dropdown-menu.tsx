@@ -91,10 +91,12 @@ const DropdownMenuItem = ({
   children,
   className,
   onClick,
+  asChild,
 }: {
   children: React.ReactNode;
   className?: string;
   onClick?: () => void;
+  asChild?: boolean;
 }) => {
   const context = React.useContext(DropdownMenuContext);
   if (!context) return null;
@@ -103,6 +105,17 @@ const DropdownMenuItem = ({
     onClick?.();
     context.setIsOpen(false);
   };
+
+  if (asChild && React.isValidElement(children)) {
+    return React.cloneElement(children as any, {
+      onClick: handleClick,
+      className: cn(
+        "relative flex cursor-pointer select-none items-center rounded-xl px-3 py-2.5 text-sm font-bold outline-none transition-colors hover:bg-slate-50 focus:bg-slate-100 w-full",
+        className,
+        (children.props as any).className
+      ),
+    });
+  }
 
   return (
     <div
@@ -118,9 +131,17 @@ const DropdownMenuItem = ({
 };
 DropdownMenuItem.displayName = "DropdownMenuItem";
 
+const DropdownMenuSeparator = ({ className }: { className?: string }) => {
+  return (
+    <div className={cn("my-1 h-px bg-slate-200", className)} role="separator" />
+  );
+};
+DropdownMenuSeparator.displayName = "DropdownMenuSeparator";
+
 export {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
 };
