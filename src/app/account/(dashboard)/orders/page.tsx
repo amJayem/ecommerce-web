@@ -30,8 +30,9 @@ export default function AccountOrdersPage() {
       setIsLoading(true);
       const response = await getUserOrders({ page: 1, limit: 20 });
       setOrders(response.orders);
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Failed to load orders");
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
+      setError(error.response?.data?.message || "Failed to load orders");
     } finally {
       setIsLoading(false);
     }
@@ -67,8 +68,8 @@ export default function AccountOrdersPage() {
             No orders yet
           </h2>
           <p className="text-gray-500 max-w-xs mx-auto mb-8">
-            Looks like you haven't placed any orders. Start shopping to see your
-            history here!
+            {`Looks like you haven't placed any orders. Start shopping to see
+            your history here!`}
           </p>
           <Link href="/products">
             <Button className="bg-green-600 hover:bg-green-700 text-white rounded-2xl h-12 px-8">

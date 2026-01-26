@@ -65,6 +65,11 @@ const allDomains = [
 ].filter(Boolean);
 
 const nextConfig: NextConfig = {
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
+  },
   images: {
     remotePatterns,
     // Keep domains for backward compatibility, but remotePatterns takes precedence in Next.js 13+

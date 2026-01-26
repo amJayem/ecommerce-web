@@ -1,27 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import {
-  getAddresses,
-  createAddress,
-  updateAddress,
-  deleteAddress,
-  setDefaultAddress,
-} from "@/lib/api/user";
-import { UserAddress } from "@/types/auth";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-  DialogClose,
 } from "@/components/ui/dialog";
 import {
   DropdownMenu,
@@ -29,22 +17,31 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
-  Plus,
-  MapPin,
-  MoreVertical,
-  Trash2,
-  Edit2,
-  CheckCircle2,
-  Loader2,
-  MoreHorizontal,
-  Home,
+  createAddress,
+  deleteAddress,
+  getAddresses,
+  setDefaultAddress,
+  updateAddress,
+} from "@/lib/api/user";
+import { cn } from "@/lib/utils";
+import { UserAddress } from "@/types/auth";
+import {
   Briefcase,
   Building,
-  AlertCircle,
+  CheckCircle2,
+  Edit2,
+  Home,
+  Loader2,
+  MapPin,
+  MoreHorizontal,
+  Plus,
+  Trash2,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { cn } from "@/lib/utils";
 
 const ADDRESS_TYPES = [
   { id: "Home" as const, icon: Home, label: "Home" },

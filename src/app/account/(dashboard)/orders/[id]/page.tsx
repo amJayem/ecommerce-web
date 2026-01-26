@@ -1,24 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { getOrderById } from "@/lib/api/order";
-import { Order } from "@/types/order";
 import { Button } from "@/components/ui/button";
+import { getOrderById } from "@/lib/api/order";
+import { cn, getSafeImageSrc } from "@/lib/utils";
+import { Order } from "@/types/order";
 import {
   ArrowLeft,
-  Loader2,
-  Package,
-  MapPin,
-  CreditCard,
   Calendar,
-  Truck,
   CheckCircle2,
+  CreditCard,
+  Loader2,
+  MapPin,
+  Package,
+  Truck,
 } from "lucide-react";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { getSafeImageSrc } from "@/lib/utils";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const STATUS_COLORS = {
   PENDING: "bg-yellow-100 text-yellow-800 border-yellow-200",
@@ -32,7 +31,6 @@ const STATUS_STEPS = ["PENDING", "CONFIRMED", "SHIPPED", "DELIVERED"];
 
 export default function OrderDetailsPage() {
   const params = useParams();
-  const router = useRouter();
   const orderId = params.id as string;
 
   const [order, setOrder] = useState<Order | null>(null);
@@ -50,8 +48,9 @@ export default function OrderDetailsPage() {
       setIsLoading(true);
       const data = await getOrderById(orderId);
       setOrder(data);
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Failed to load order details");
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
+      setError(error.response?.data?.message || "Failed to load order details");
     } finally {
       setIsLoading(false);
     }
