@@ -24,12 +24,12 @@ export default function CheckoutPage() {
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const router = useRouter();
   const dispatch = useDispatch();
-  const { isAuthenticated, isLoading: authLoading } = useAuth();
+  const { isAuthenticated, isLoading: authLoading, user } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const subtotal = useMemo(
     () => cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
-    [cartItems]
+    [cartItems],
   );
   const deliveryCost = 50;
   const discount = 0;
@@ -150,6 +150,8 @@ export default function CheckoutPage() {
         .join(", ");
       // Prepare order payload in new format
       const orderPayload = {
+        // Include userId for authenticated users
+        ...(isAuthenticated && user?.id ? { userId: parseInt(user.id) } : {}),
         items: cartItems.map((item) => ({
           productId: item.id,
           quantity: item.quantity,
@@ -176,7 +178,7 @@ export default function CheckoutPage() {
       toast.success("Order placed successfully!");
       dispatch(clearCart());
       router.push(
-        `/thank-you?orderNumber=${result.order.id}&token=${result.confirmationToken}`
+        `/thank-you?orderNumber=${result.order.id}&token=${result.confirmationToken}`,
       );
     } catch {
       toast.error("Failed to place order. Please try again.");
@@ -466,7 +468,7 @@ export default function CheckoutPage() {
                       <div className="w-12 h-12 relative rounded-md overflow-hidden">
                         <Image
                           src={getSafeImageSrc(
-                            item.coverImage || item.imageUrl
+                            item.coverImage || item.imageUrl,
                           )}
                           alt={item.name}
                           fill
