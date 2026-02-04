@@ -47,7 +47,7 @@ export async function getProducts(): Promise<Product[]> {
  * GET /api/products?categoryId={categoryId} or GET /api/products?categorySlug={slug}
  */
 export async function getProductsByCategory(
-  categoryParam: string
+  categoryParam: string,
 ): Promise<Product[]> {
   try {
     // Try to determine if it's an ID (numeric) or slug (string)
@@ -85,7 +85,7 @@ export async function getProductsByCategory(
                 typeof data === "object" && data !== null
                   ? JSON.stringify(data).substring(0, 200)
                   : data,
-            }
+            },
           );
         }
         data = [];
@@ -97,7 +97,7 @@ export async function getProductsByCategory(
     // Log for debugging in production
     if (process.env.NODE_ENV === "production") {
       console.log(
-        `[getProductsByCategory] Category: ${categoryParam}, Products found: ${products.length}`
+        `[getProductsByCategory] Category: ${categoryParam}, Products found: ${products.length}`,
       );
     }
 
@@ -105,7 +105,7 @@ export async function getProductsByCategory(
   } catch (error) {
     console.error(
       `Error fetching products for category ${categoryParam}:`,
-      error
+      error,
     );
     // In production, log more details
     if (process.env.NODE_ENV === "production" && error instanceof Error) {
@@ -132,6 +132,22 @@ export async function getProductById(id: string): Promise<Product> {
   } catch (error) {
     console.error(`Error fetching product ${id}:`, error);
     throw new Error(`Failed to fetch product ${id}`);
+  }
+}
+
+/**
+ * Fetch a single product by slug
+ * GET /api/products/slug/{slug}
+ */
+export async function getProductBySlug(slug: string): Promise<Product> {
+  try {
+    const response = await api.get(`/products/slug/${slug}`);
+    // Handle different response formats - your API might return { product: {...} } or just the product
+    const data = response.data?.product || response.data?.data || response.data;
+    return data;
+  } catch (error) {
+    console.error(`Error fetching product with slug ${slug}:`, error);
+    throw new Error(`Failed to fetch product with slug ${slug}`);
   }
 }
 
@@ -229,14 +245,14 @@ export async function fetchProductsSSR(): Promise<Product[]> {
  * Use this in server components and getServerSideProps
  */
 export async function fetchProductsByCategorySSR(
-  categoryParam: string
+  categoryParam: string,
 ): Promise<Product[]> {
   try {
     return await getProductsByCategory(categoryParam);
   } catch (error) {
     console.error(
       `SSR: Error fetching products for category ${categoryParam}:`,
-      error
+      error,
     );
     // Return empty array as fallback for SSR
     return [];
@@ -252,6 +268,22 @@ export async function fetchProductByIdSSR(id: string): Promise<Product | null> {
     return await getProductById(id);
   } catch (error) {
     console.error(`SSR: Error fetching product ${id}:`, error);
+    // Return null as fallback for SSR
+    return null;
+  }
+}
+
+/**
+ * Server-side function to fetch a single product by slug with error handling
+ * Use this in server components and getServerSideProps
+ */
+export async function fetchProductBySlugSSR(
+  slug: string,
+): Promise<Product | null> {
+  try {
+    return await getProductBySlug(slug);
+  } catch (error) {
+    console.error(`SSR: Error fetching product with slug ${slug}:`, error);
     // Return null as fallback for SSR
     return null;
   }

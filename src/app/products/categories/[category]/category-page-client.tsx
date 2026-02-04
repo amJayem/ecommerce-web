@@ -74,11 +74,11 @@ CategoryPageClientProps) {
                 )}
 
                 {/* Product Image - Clickable for details */}
-                <Link href={`/products/${product.id}`}>
+                <Link href={`/products/${product.slug || product.id}`}>
                   <div className="w-full h-40 relative mb-4 overflow-hidden rounded-lg cursor-pointer">
                     <Image
                       src={getSafeImageSrc(
-                        product.coverImage || product.imageUrl
+                        product.coverImage || product.imageUrl,
                       )}
                       alt={product.name}
                       fill
@@ -88,7 +88,7 @@ CategoryPageClientProps) {
                 </Link>
 
                 {/* Product Info - Clickable for details */}
-                <Link href={`/products/${product.id}`}>
+                <Link href={`/products/${product.slug || product.id}`}>
                   <div className="cursor-pointer">
                     <h3 className="font-semibold text-lg text-gray-800 mb-2 line-clamp-2 hover:text-green-600 transition-colors">
                       {product.name}

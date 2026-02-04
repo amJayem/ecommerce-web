@@ -36,13 +36,13 @@ export default function AllProductsPageClient({
   const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(
-    searchParams.get("category") || ""
+    searchParams.get("category") || "",
   );
   const [minPrice, setMinPrice] = useState(
-    parseInt(searchParams.get("minPrice") || "0")
+    parseInt(searchParams.get("minPrice") || "0"),
   );
   const [maxPrice, setMaxPrice] = useState(
-    parseInt(searchParams.get("maxPrice") || "10000")
+    parseInt(searchParams.get("maxPrice") || "10000"),
   );
   const [sort, setSort] = useState(searchParams.get("sort") || "");
 
@@ -173,7 +173,7 @@ export default function AllProductsPageClient({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
               {products.map((product) => {
                 const cartItem = cartItems.find(
-                  (item) => item.id === product.id
+                  (item) => item.id === product.id,
                 );
                 const currentQuantity = cartItem ? cartItem.quantity : 0;
 
@@ -191,11 +191,11 @@ export default function AllProductsPageClient({
                     )}
 
                     {/* Product Image */}
-                    <Link href={`/products/${product.id}`}>
+                    <Link href={`/products/${product.slug || product.id}`}>
                       <div className="w-full h-40 relative mb-4 overflow-hidden rounded-lg cursor-pointer">
                         <Image
                           src={getSafeImageSrc(
-                            product.coverImage || product.imageUrl
+                            product.coverImage || product.imageUrl,
                           )}
                           alt={product.name}
                           fill
@@ -205,7 +205,7 @@ export default function AllProductsPageClient({
                     </Link>
 
                     {/* Product Info */}
-                    <Link href={`/products/${product.id}`}>
+                    <Link href={`/products/${product.slug || product.id}`}>
                       <div className="cursor-pointer mb-4">
                         {/* Category Badge */}
                         {product.category &&

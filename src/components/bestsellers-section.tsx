@@ -42,7 +42,7 @@ export function BestsellersSection({
                 className="bg-white border rounded-xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 group"
               >
                 {/* Product Image - Clickable for details */}
-                <Link href={`/products/${product.id}`}>
+                <Link href={`/products/${product.slug || product.id}`}>
                   <div className="w-full h-32 relative mb-4 overflow-hidden rounded-lg cursor-pointer">
                     <Image
                       src={product.coverImage || product.imageUrl}
@@ -54,7 +54,7 @@ export function BestsellersSection({
                 </Link>
 
                 {/* Product Info - Clickable for details */}
-                <Link href={`/products/${product.id}`}>
+                <Link href={`/products/${product.slug || product.id}`}>
                   <div className="px-4 cursor-pointer">
                     <div className="mb-2">
                       <span className="text-xs text-green-600 font-medium bg-green-50 px-2 py-1 rounded-full">

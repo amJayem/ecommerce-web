@@ -39,7 +39,7 @@ export function SearchBar({ className = "" }: SearchBarProps) {
         case "ArrowDown":
           e.preventDefault();
           setSelectedIndex((prev) =>
-            prev < results.length - 1 ? prev + 1 : prev
+            prev < results.length - 1 ? prev + 1 : prev,
           );
           break;
         case "ArrowUp":
@@ -49,7 +49,9 @@ export function SearchBar({ className = "" }: SearchBarProps) {
         case "Enter":
           e.preventDefault();
           if (selectedIndex >= 0 && results[selectedIndex]) {
-            router.push(`/products/${results[selectedIndex].id}`);
+            router.push(
+              `/products/${results[selectedIndex].slug || results[selectedIndex].id}`,
+            );
             handleClose();
           }
           break;

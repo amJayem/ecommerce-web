@@ -54,7 +54,7 @@ export function SearchResultsModal({
   }, [isOpen, onClose, parentRef]);
 
   const handleProductClick = (product: Product) => {
-    router.push(`/products/${product.id}`);
+    router.push(`/products/${product.slug || product.id}`);
     onClose();
   };
 
@@ -133,7 +133,7 @@ export function SearchResultsModal({
                   <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
                     <Image
                       src={getSafeImageSrc(
-                        product.coverImage || product.imageUrl
+                        product.coverImage || product.imageUrl,
                       )}
                       alt={product.name}
                       fill

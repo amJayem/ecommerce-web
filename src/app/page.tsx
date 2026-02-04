@@ -73,6 +73,7 @@ export default async function HomePage() {
             products={storeProducts.map((product) => ({
               id: product.id,
               name: product.name,
+              slug: product.slug,
               price: product.price,
               imageUrl: product.imageUrl,
               coverImage:
@@ -119,6 +120,7 @@ export default async function HomePage() {
               products={displayFeaturedProducts.map((product) => ({
                 id: product.id,
                 name: product.name,
+                slug: product.slug,
                 price: product.price,
                 imageUrl: product.imageUrl,
                 coverImage:

@@ -1,37 +1,18 @@
-// Product detail page with enhanced UX - handles both slug and ID
-import {
-  fetchProductByIdSSR,
-  fetchProductBySlugSSR,
-  fetchProductsByCategorySSR,
-} from "@/lib/api";
+// Product detail page with slug-based routing
+import { fetchProductBySlugSSR, fetchProductsByCategorySSR } from "@/lib/api";
 
 import { notFound } from "next/navigation";
-import ProductPageClient from "./product-page-client";
+import ProductPageClient from "@/app/products/[slug]/product-page-client";
 
 interface ProductPageProps {
   params: Promise<{
-    id: string;
+    slug: string;
   }>;
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const { id: productParam } = await params;
-
-  // Try to fetch by slug first (if it's a slug), then fall back to ID
-  let product = null;
-
-  // Check if the param looks like a slug (contains hyphens or letters)
-  const isLikelySlug = /[a-z-]/.test(productParam);
-
-  if (isLikelySlug) {
-    // Try fetching by slug first
-    product = await fetchProductBySlugSSR(productParam);
-  }
-
-  // If slug fetch failed or param looks like an ID, try fetching by ID
-  if (!product) {
-    product = await fetchProductByIdSSR(productParam);
-  }
+  const { slug: productSlug } = await params;
+  const product = await fetchProductBySlugSSR(productSlug);
 
   if (!product) {
     notFound();

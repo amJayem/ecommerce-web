@@ -9,6 +9,7 @@ import Link from "next/link";
 type Product = {
   id: number;
   name: string;
+  slug: string;
   price: number;
   imageUrl: string;
   coverImage: string;
@@ -39,7 +40,7 @@ export default function ProductGrid({ products }: ProductGridProps) {
             className="border rounded-xl p-4 shadow-card hover:shadow-card-hover transition-all duration-300 bg-white"
           >
             {/* Product Image */}
-            <Link href={`/products/${product?.id}`}>
+            <Link href={`/products/${product?.slug || product?.id}`}>
               <div className="w-full h-48 relative mb-4 overflow-hidden rounded-lg cursor-pointer">
                 <Image
                   src={product?.coverImage || product?.imageUrl}
@@ -51,7 +52,7 @@ export default function ProductGrid({ products }: ProductGridProps) {
             </Link>
 
             {/* Product Info - Clickable for details */}
-            <Link href={`/products/${product?.id}`}>
+            <Link href={`/products/${product?.slug || product?.id}`}>
               <div className="cursor-pointer mb-4">
                 <h3 className="mt-2 text-lg font-semibold text-gray-800 mb-2 line-clamp-2 hover:text-green-600 transition-colors">
                   {product?.name}
