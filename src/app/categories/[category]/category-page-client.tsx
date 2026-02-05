@@ -33,7 +33,7 @@ CategoryPageClientProps) {
       {/* Breadcrumb Navigation */}
       <div className="mb-8">
         <Link
-          href="/products/categories"
+          href="/categories"
           className="inline-flex items-center text-green-600 hover:text-green-700 mb-4"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
@@ -160,7 +160,7 @@ CategoryPageClientProps) {
               category. Check back soon or browse other categories!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/products/categories">
+              <Link href="/categories">
                 <Button
                   variant="outline"
                   className="text-green-700 border-green-500 hover:bg-green-600 hover:text-white"
@@ -180,7 +180,7 @@ CategoryPageClientProps) {
 
       {/* Back to Categories */}
       <div className="text-center mt-12">
-        <Link href="/products/categories">
+        <Link href="/categories">
           <Button
             variant="outline"
             size="lg"

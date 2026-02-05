@@ -26,7 +26,7 @@ export function HeroSection() {
                 Shop Now
               </Button>
             </Link>
-            <Link href="/products/categories">
+            <Link href="/categories">
               <Button
                 size="lg"
                 variant="outline"

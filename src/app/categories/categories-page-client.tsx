@@ -110,9 +110,7 @@ export default function CategoriesPageClient({
                     </div>
                   </div>
                   <Link
-                    href={`/products/categories/${
-                      category.slug || category.id
-                    }`}
+                    href={`/categories/${category.slug || category.id}`}
                     className="flex-shrink-0"
                   >
                     <Button
@@ -206,11 +204,7 @@ export default function CategoriesPageClient({
 
                 {categoryProducts.length > 4 && (
                   <div className="text-center mt-8">
-                    <Link
-                      href={`/products/categories/${
-                        category.slug || category.id
-                      }`}
-                    >
+                    <Link href={`/categories/${category.slug || category.id}`}>
                       <Button
                         variant="outline"
                         size="lg"

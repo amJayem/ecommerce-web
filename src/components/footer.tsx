@@ -92,7 +92,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/products/categories"
+                  href="/categories"
                   className="text-gray-600 hover:text-green-600 transition-colors"
                 >
                   Categories

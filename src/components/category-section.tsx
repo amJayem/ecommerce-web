@@ -63,7 +63,7 @@ export function CategorySection({ categories }: CategorySectionProps) {
               const IconComponent = !isEmoji ? iconMap[icon || "Apple"] : null;
 
               return (
-                <Link href={`/products/categories/${slug || id}`} key={id}>
+                <Link href={`/categories/${slug || id}`} key={id}>
                   <div className="flex flex-col items-center p-6 bg-green-50 rounded-xl hover:shadow-lg hover:bg-green-100 transition-all duration-300 group">
                     <div className="p-3 bg-white rounded-full mb-4 group-hover:scale-110 transition-transform">
                       {isEmoji ? (
@@ -87,7 +87,7 @@ export function CategorySection({ categories }: CategorySectionProps) {
         </div>
 
         <div className="text-center">
-          <Link href="/products/categories">
+          <Link href="/categories">
             <Button
               variant="outline"
               size="lg"

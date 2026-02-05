@@ -178,7 +178,7 @@ export function Navbar() {
               displayCategories.map((category: Category) => (
                 <Link
                   key={category.id}
-                  href={`/products/categories/${category.slug}`}
+                  href={`/categories/${category.slug}`}
                   className="flex-shrink-0 px-4 py-3 text-white hover:bg-green-700 transition-colors whitespace-nowrap"
                 >
                   {category.name}
@@ -186,7 +186,7 @@ export function Navbar() {
               ))}
             {!isLoadingCategories && hasMoreCategories && (
               <Link
-                href="/products/categories"
+                href="/categories"
                 className="flex-shrink-0 px-4 py-3 text-white hover:bg-green-700 transition-colors whitespace-nowrap font-semibold"
               >
                 See All

@@ -43,7 +43,7 @@ ProductPageClientProps) {
       {/* Breadcrumb Navigation */}
       <div className="mb-8">
         <Link
-          href="/products/categories"
+          href="/categories"
           className="inline-flex items-center text-green-600 hover:text-green-700 mb-2"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
@@ -51,12 +51,12 @@ ProductPageClientProps) {
         </Link>
 
         <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
-          <Link href="/products/categories" className="hover:text-green-600">
+          <Link href="/categories" className="hover:text-green-600">
             Categories
           </Link>
           <span>/</span>
           <Link
-            href={`/products/categories/${
+            href={`/categories/${
               product.category && typeof product.category === "object"
                 ? product.category.slug
                 : product.categoryId
